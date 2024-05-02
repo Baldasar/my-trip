@@ -38,33 +38,40 @@ public class RegisterActivity extends AppCompatActivity {
                 String nome = ((TextInputEditText) findViewById(R.id.registration_name_editText)).getText().toString();
 
                 if(nome.isEmpty()){
-                    ((TextInputEditText) findViewById(R.id.registration_name_editText)).setError("Campo obrigatório");
+                    Toast.makeText(RegisterActivity.this, "Campo nome é obrigatório", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 String email = ((TextInputEditText) findViewById(R.id.registration_email_editText)).getText().toString();
 
                 if(email.isEmpty()){
-                    ((TextInputEditText) findViewById(R.id.registration_email_editText)).setError("Campo obrigatório");
+                    Toast.makeText(RegisterActivity.this, "Campo email é obrigatório", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                String regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+
+                if(!email.matches(regex)){
+                    Toast.makeText(RegisterActivity.this, "Email inválido", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 String senha = ((TextInputEditText) findViewById(R.id.registration_password_editText)).getText().toString();
 
                 if(senha.isEmpty()){
-                    ((TextInputEditText) findViewById(R.id.registration_password_editText)).setError("Campo obrigatório");
+                    Toast.makeText(RegisterActivity.this, "Campo senha é obrigatório", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 String confirmarSenha = ((TextInputEditText) findViewById(R.id.registration_confirm_password_editText)).getText().toString();
 
                 if(confirmarSenha.isEmpty()){
-                    ((TextInputEditText) findViewById(R.id.registration_confirm_password_editText)).setError("Campo obrigatório");
+                    Toast.makeText(RegisterActivity.this, "Campo confirmar senha é obrigatório", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 if(!senha.equals(confirmarSenha)){
-                    ((TextInputEditText) findViewById(R.id.registration_confirm_password_editText)).setError("As senhas não coincidem");
+                    Toast.makeText(RegisterActivity.this, "Senhas não conferem", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
