@@ -59,13 +59,13 @@ public class GasolinaDAO extends AbstrataDAO{
         return model;
     }
 
-    public List<GasolinaModel> buscaGasolina(String usuario) throws SQLException {
+    public List<GasolinaModel> buscaGasolina(String viagem) throws SQLException {
         List<GasolinaModel> lista = new ArrayList<>();
 
         try {
             Open();
             String selection = GasolinaModel.COLUNA_VIAGEM + " = ?";
-            String[] selectionArgs = {usuario};
+            String[] selectionArgs = {viagem};
 
             Cursor cursor = db.query(GasolinaModel.TABELA_NOME, colunas, selection, selectionArgs, null, null, null);
 
