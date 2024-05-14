@@ -19,7 +19,7 @@ public class GasolinaModel {
                     COLUNA_KM_LITRO   + " REAL NOT NULL," +
                     COLUNA_CUSTO_MEDIO + " REAL NOT NULL," +
                     COLUNA_ALUGUEL_VEICULO + " REAL NOT NULL," +
-                    "FOREIGN KEY(" + COLUNA_VIAGEM + ") REFERENCES viagem(id));";
+                    "FOREIGN KEY(" + COLUNA_VIAGEM + ") REFERENCES viagem(_id));";
 
     public static final String DROP_TABLE = "drop table if exists " + TABELA_NOME + ";";
 

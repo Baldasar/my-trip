@@ -18,7 +18,7 @@ public class ViagemModel {
                     COLUNA_TITULO  + " TEXT NOT NULL, " +
                     COLUNA_LOCAL   + " TEXT NOT NULL, " +
                     COLUNA_DURACAO + " TEXT NOT NULL, " +
-                    "FOREIGN KEY(" + COLUNA_USUARIO + ") REFERENCES usuario(id));";
+                    "FOREIGN KEY(" + COLUNA_USUARIO + ") REFERENCES usuario(_id));";
 
     public static final String DROP_TABLE = "drop table if exists " + TABELA_NOME + ";";
 

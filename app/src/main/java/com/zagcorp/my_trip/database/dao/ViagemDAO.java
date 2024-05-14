@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.zagcorp.my_trip.database.helper.DBOpenHelper;
-import com.zagcorp.my_trip.database.model.UsuarioModel;
 import com.zagcorp.my_trip.database.model.ViagemModel;
 
 import java.sql.SQLException;
@@ -51,7 +50,7 @@ public class ViagemDAO extends AbstrataDAO{
         model.setUsuario(cursor.getLong(1));
         model.setTitulo(cursor.getString(2));
         model.setLocal(cursor.getString(3));
-        model.setDuracao(cursor.getString(2));
+        model.setDuracao(cursor.getString(4));
 
         return model;
     }
