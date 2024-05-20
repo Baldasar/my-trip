@@ -19,7 +19,7 @@ public class GasolinaDAO extends AbstrataDAO{
             GasolinaModel.COLUNA_KM,
             GasolinaModel.COLUNA_KM_LITRO,
             GasolinaModel.COLUNA_CUSTO_MEDIO,
-            GasolinaModel.COLUNA_ALUGUEL_VEICULO
+            GasolinaModel.COLUNA_QNTD_VEICULO
     };
 
     public GasolinaDAO(Context context) {
@@ -37,7 +37,7 @@ public class GasolinaDAO extends AbstrataDAO{
             values.put(GasolinaModel.COLUNA_KM, model.getKm());
             values.put(GasolinaModel.COLUNA_KM_LITRO, model.getKm_litro());
             values.put(GasolinaModel.COLUNA_CUSTO_MEDIO, model.getCusto_medio());
-            values.put(GasolinaModel.COLUNA_ALUGUEL_VEICULO, model.getAluguel_veiculo());
+            values.put(GasolinaModel.COLUNA_QNTD_VEICULO, model.getQntd_veiculo());
 
             rowAffect = db.insert(GasolinaModel.TABELA_NOME, null, values);
         } finally {
@@ -54,7 +54,7 @@ public class GasolinaDAO extends AbstrataDAO{
         model.setKm(cursor.getDouble(2));
         model.setKm_litro(cursor.getDouble(3));
         model.setCusto_medio(cursor.getDouble(4));
-        model.setAluguel_veiculo(cursor.getDouble(5));
+        model.setQntd_veiculo(cursor.getDouble(5));
 
         return model;
     }

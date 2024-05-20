@@ -110,6 +110,9 @@ public class LocalTripActivity extends AppCompatActivity {
                 try {
                     dao.Insert(viagem);
                     Toast.makeText(LocalTripActivity.this, "Viagem cadastrada com sucesso", Toast.LENGTH_SHORT).show();
+                    Intent it = new Intent(LocalTripActivity.this, GasolinaActivity.class);
+                    it.putExtra("viagemId", viagem.getId());
+                    startActivity(it);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
