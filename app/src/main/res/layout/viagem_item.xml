@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textNomeViagem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="Nome da Viagem"/>
+
+    <TextView
+        android:id="@+id/textSubtitulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textNomeViagem"
+        android:textSize="14sp"
+        android:textColor="#888888"
+        android:text="Subtítulo da Viagem"/>
+
+    <Button
+        android:id="@+id/btnVerMais"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:text="Ver mais"/>
+
+    <TextView
+        android:id="@+id/textValor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textSubtitulo"
+        android:layout_marginTop="16dp"
+        android:text="Outro texto abaixo do subtítulo"
+        android:textSize="14sp"
+        android:textColor="#000000"/>
+
+</RelativeLayout>

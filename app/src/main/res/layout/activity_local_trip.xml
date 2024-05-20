@@ -1,116 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="30dp">
+        android:layout_height="wrap_content">
 
-        <LinearLayout
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnVoltar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="16dp"
+            android:src="@drawable/back_arrow_icon" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+
+
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_weight="9"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Título da viagem"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/edtTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:hint="Digite o título da viagem"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:textCursorDrawable="@null" />
 
-            <Button
-                android:id="@+id/btnVoltar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/black"
-                android:text="Voltar"
-                android:textColor="@color/white" />
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="20dp"
+            android:contentDescription="Imagem da viagem"
+            android:scaleType="centerCrop"
+            android:src="@drawable/trip_place" />
 
-        </LinearLayout>
-    </ScrollView>
-
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
+        <EditText
+            android:id="@+id/edtLocalTrip"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:hint="Digite o local da viagem"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:textCursorDrawable="@null" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Título da viagem"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+        <Spinner
+            android:id="@+id/spinnerDuration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:spinnerMode="dropdown" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/edtTitle"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Digite o título da viagem"
-                android:textColorHint="@color/black"
-                app:boxStrokeColor="@color/black"
-                app:boxStrokeWidthFocused="2dp"
-                app:endIconMode="clear_text"
-                app:endIconTint="@color/black"
-                app:hintTextColor="@color/black"
-                app:startIconTint="@color/black">
+        <Button
+            android:id="@+id/btnContinuar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@color/black"
+            android:text="Continuar"
+            android:textColor="@color/white" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="textEmailAddress"
-                    android:textColor="@color/black"
-                    android:textCursorDrawable="@null" />
+    </LinearLayout>
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_marginTop="20dp"
-                android:contentDescription="Imagem da viagem"
-                android:scaleType="centerCrop"
-                android:src="@drawable/trip_place" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/edtLocalTrip"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Digite o local da viagem"
-                android:textColorHint="@color/black"
-                app:boxStrokeColor="@color/black"
-                app:boxStrokeWidthFocused="2dp"
-                app:endIconMode="clear_text"
-                app:endIconTint="@color/black"
-                app:hintTextColor="@color/black"
-                app:startIconTint="@color/black">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="textEmailAddress"
-                    android:textColor="@color/black"
-                    android:textCursorDrawable="@null" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <Button
-                android:id="@+id/button_continue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:background="@color/black"
-                android:text="Continuar"
-                android:textColor="@color/white" />
-
-
-        </LinearLayout>
-    </ScrollView>
-</RelativeLayout>
-
+</LinearLayout>

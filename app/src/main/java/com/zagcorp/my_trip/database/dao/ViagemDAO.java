@@ -44,17 +44,6 @@ public class ViagemDAO extends AbstrataDAO{
         return rowAffect;
     }
 
-    public final ViagemModel CursorToStructure(Cursor cursor) {
-        ViagemModel model = new ViagemModel();
-        model.setId(cursor.getLong(0));
-        model.setUsuario(cursor.getLong(1));
-        model.setTitulo(cursor.getString(2));
-        model.setLocal(cursor.getString(3));
-        model.setDuracao(cursor.getString(4));
-
-        return model;
-    }
-
     public List<ViagemModel> buscaViagens(String usuario) throws SQLException {
         List<ViagemModel> lista = new ArrayList<>();
 
@@ -73,5 +62,16 @@ public class ViagemDAO extends AbstrataDAO{
         }
 
         return lista;
+    }
+
+    public final ViagemModel CursorToStructure(Cursor cursor) {
+        ViagemModel model = new ViagemModel();
+        model.setId(cursor.getLong(0));
+        model.setUsuario(cursor.getLong(1));
+        model.setTitulo(cursor.getString(2));
+        model.setLocal(cursor.getString(3));
+        model.setDuracao(cursor.getString(4));
+
+        return model;
     }
 }

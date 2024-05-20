@@ -8,23 +8,50 @@ import android.view.View;
 import android.widget.Button;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.widget.Toast;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.zagcorp.my_trip.database.dao.ViagemDAO;
+import com.zagcorp.my_trip.database.model.ViagemModel;
+
+import java.util.List;
+
 public class HomeActivity extends AppCompatActivity {
-    private Button btnLogout;
+    private FloatingActionButton btnAdd, btnLogout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        btnAdd = findViewById(R.id.btnAdd);
         btnLogout = findViewById(R.id.btnLogout);
 
         Intent it = new Intent(HomeActivity.this, MainActivity.class);
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(HomeActivity.this);
+        Integer userId = sharedPreferences.getInt("userId", 0);
+
+        ViagemDAO dao = new ViagemDAO(getApplicationContext());
+
+        try {
+            List<ViagemModel> all = dao.buscaViagens(userId.toString());
+            RecyclerView recyclerViewViagens = findViewById(R.id.recyclerViewViagens);
+            recyclerViewViagens.setLayoutManager(new LinearLayoutManager(this));
+            ViagemAdapter adapter = new ViagemAdapter(all, this);
+            recyclerViewViagens.setAdapter(adapter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
                 builder.setTitle("Confirmar Saída");
                 builder.setMessage("Tem certeza que deseja sair?");
@@ -54,6 +81,12 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent it = new Intent(HomeActivity.this, LocalTripActivity.class);
+                startActivity(it);
+            }
+        });
     }
 }

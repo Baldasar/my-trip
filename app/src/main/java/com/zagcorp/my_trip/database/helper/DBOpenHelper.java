@@ -5,12 +5,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.zagcorp.my_trip.database.model.UsuarioModel;
+import com.zagcorp.my_trip.database.model.ViagemModel;
+
 
 public class DBOpenHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "my_trip.db";
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public DBOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -19,11 +21,13 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(UsuarioModel.CREATE_TABLE);
+        db.execSQL(ViagemModel.CREATE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(UsuarioModel.CREATE_TABLE);
+        db.execSQL(ViagemModel.CREATE_TABLE);
     }
 
 }
