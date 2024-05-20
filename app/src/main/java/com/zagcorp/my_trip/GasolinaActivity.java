@@ -18,6 +18,9 @@ public class GasolinaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gasolina);
 
+        Intent it = getIntent();
+        Integer idViagem = it.getIntExtra("viagemId", 0);
+
         btnVoltar = findViewById(R.id.btnVoltar);
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {
