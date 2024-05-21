@@ -47,7 +47,7 @@ public class HospedagemActivity extends AppCompatActivity {
                 builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent it = new Intent(HospedagemActivity.this, TarifaActivity.class);
+                        Intent it = new Intent(HospedagemActivity.this, HomeActivity.class);
                         startActivity(it);
                     }
                 });
@@ -114,7 +114,7 @@ public class HospedagemActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    Intent it = new Intent(HospedagemActivity.this, HospedagemActivity.class);
+                    Intent it = new Intent(HospedagemActivity.this, HomeActivity.class);
                     it.putExtra("viagemId", idViagem);
                     startActivity(it);
                     Toast.makeText(HospedagemActivity.this, "Etapa pulada com sucesso", Toast.LENGTH_SHORT).show();

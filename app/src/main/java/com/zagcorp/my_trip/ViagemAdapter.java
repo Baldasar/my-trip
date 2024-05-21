@@ -1,11 +1,13 @@
 package com.zagcorp.my_trip;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,6 +42,10 @@ public class ViagemAdapter extends RecyclerView.Adapter<ViagemAdapter.ViewHolder
         holder.btnVerMais.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(context, DetailsActicity.class);
+                Integer id = (int) (long) viagem.getId();
+                intent.putExtra("viagemId", id);
+                context.startActivity(intent);
             }
         });
     }

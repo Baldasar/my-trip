@@ -18,7 +18,7 @@ public class GasolinaModel {
                     COLUNA_KM  + " REAL NOT NULL, " +
                     COLUNA_KM_LITRO   + " REAL NOT NULL," +
                     COLUNA_CUSTO_MEDIO + " REAL NOT NULL," +
-                    COLUNA_QNTD_VEICULO + " REAL NOT NULL," +
+                    COLUNA_QNTD_VEICULO + " INTEGER NOT NULL, " +
                     "FOREIGN KEY(" + COLUNA_VIAGEM + ") REFERENCES viagem(_id));";
 
     public static final String DROP_TABLE = "drop table if exists " + TABELA_NOME + ";";
@@ -28,7 +28,7 @@ public class GasolinaModel {
     private double km;
     private double km_litro;
     private double custo_medio;
-    private double qntd_veiculo;
+    private Integer qntd_veiculo;
 
     public long getId() {
         return id;
@@ -70,11 +70,11 @@ public class GasolinaModel {
         this.custo_medio = custo_medio;
     }
 
-    public double getQntd_veiculo() {
+    public Integer getQntd_veiculo() {
         return qntd_veiculo;
     }
 
-    public void setQntd_veiculo(double qntd_veiculo) {
+    public void setQntd_veiculo(Integer qntd_veiculo) {
         this.qntd_veiculo = qntd_veiculo;
     }
 }

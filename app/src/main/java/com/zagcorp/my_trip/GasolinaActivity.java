@@ -49,7 +49,7 @@ public class GasolinaActivity extends AppCompatActivity {
                 builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent it = new Intent(GasolinaActivity.this, LocalTripActivity.class);
+                        Intent it = new Intent(GasolinaActivity.this, HomeActivity.class);
                         startActivity(it);
                     }
                 });
@@ -106,7 +106,7 @@ public class GasolinaActivity extends AppCompatActivity {
                 gasolina.setKm(Double.parseDouble(totalKM));
                 gasolina.setKm_litro(Double.parseDouble(mediaKM));
                 gasolina.setCusto_medio(Double.parseDouble(custoMedio));
-                gasolina.setQntd_veiculo(Double.parseDouble(totalVeiculo));
+                gasolina.setQntd_veiculo(Integer.parseInt(totalVeiculo));
 
                 try {
                     dao.Insert(gasolina);
