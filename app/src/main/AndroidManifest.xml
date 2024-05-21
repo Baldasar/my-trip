@@ -16,6 +16,7 @@
         <activity android:name=".HomeActivity"/>
         <activity android:name=".LocalTripActivity"/>
         <activity android:name=".GasolinaActivity"/>
+        <activity android:name=".TarifaActivity"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">

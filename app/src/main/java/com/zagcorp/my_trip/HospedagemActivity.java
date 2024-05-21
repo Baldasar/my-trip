@@ -14,19 +14,18 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.zagcorp.my_trip.database.dao.GasolinaDAO;
-import com.zagcorp.my_trip.database.dao.ViagemDAO;
-import com.zagcorp.my_trip.database.model.GasolinaModel;
+import com.zagcorp.my_trip.database.dao.HospedagemDAO;
+import com.zagcorp.my_trip.database.model.HospedagemModel;
 
-public class GasolinaActivity extends AppCompatActivity {
+public class HospedagemActivity extends AppCompatActivity {
     private FloatingActionButton btnVoltar;
     private Button btnContinuar, btnPularEtapa;
-    private EditText edtTotalKM, edtMediaKM, edtCustoMedio, edtTotalVeiculo;
+    private EditText edtCusto, edtQtdNoite, edtNumQuarto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gasolina);
+        setContentView(R.layout.activity_hospedagem);
 
         Intent it = getIntent();
         Integer idViagem = it.getIntExtra("viagemId", 0);
@@ -34,22 +33,21 @@ public class GasolinaActivity extends AppCompatActivity {
         btnVoltar = findViewById(R.id.btnVoltar);
         btnContinuar = findViewById(R.id.btnContinuar);
         btnPularEtapa = findViewById(R.id.btnPularEtapa);
-        edtTotalKM = findViewById(R.id.edtTotalKM);
-        edtMediaKM = findViewById(R.id.edtMediaKM);
-        edtCustoMedio = findViewById(R.id.edtCustoMedio);
-        edtTotalVeiculo = findViewById(R.id.edtTotalVeiculo);
+        edtCusto = findViewById(R.id.edtCusto);
+        edtQtdNoite = findViewById(R.id.edtQtdNoite);
+        edtNumQuarto = findViewById(R.id.edtNumQuarto);
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(GasolinaActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(HospedagemActivity.this);
                 builder.setTitle("Confirmar Saída");
                 builder.setMessage("Tem certeza que deseja sair?");
 
                 builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent it = new Intent(GasolinaActivity.this, LocalTripActivity.class);
+                        Intent it = new Intent(HospedagemActivity.this, TarifaActivity.class);
                         startActivity(it);
                     }
                 });
@@ -69,49 +67,41 @@ public class GasolinaActivity extends AppCompatActivity {
         btnContinuar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String totalKM = edtTotalKM.getText().toString();
+                String custo = edtCusto.getText().toString();
 
-                if (totalKM.isEmpty()) {
-                    Toast.makeText(GasolinaActivity.this, "Preencha o campo total estimado de quilômetros", Toast.LENGTH_SHORT).show();
+                if (custo.isEmpty()) {
+                    Toast.makeText(HospedagemActivity.this, "Preencha o campo custo por noite", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                String mediaKM = edtMediaKM.getText().toString();
+                String qtdNoite = edtQtdNoite.getText().toString();
 
-                if (mediaKM.isEmpty()) {
-                    Toast.makeText(GasolinaActivity.this, "Preencha o campo média de quilômetros por litro", Toast.LENGTH_SHORT).show();
+                if (qtdNoite.isEmpty()) {
+                    Toast.makeText(HospedagemActivity.this, "Preencha o campo quantidade de noites", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                String custoMedio = edtCustoMedio.getText().toString();
+                String numQuarto = edtNumQuarto.getText().toString();
 
-                if (custoMedio.isEmpty()) {
-                    Toast.makeText(GasolinaActivity.this, "Selecione o custo médio por litro", Toast.LENGTH_SHORT).show();
+                if (numQuarto.isEmpty()) {
+                    Toast.makeText(HospedagemActivity.this, "Preencha o campo número de quartos", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                String totalVeiculo = edtTotalVeiculo.getText().toString();
+                HospedagemDAO dao = new HospedagemDAO(getApplicationContext());
+                HospedagemModel hospedagem = new HospedagemModel();
 
-                if (totalVeiculo.isEmpty()) {
-                    Toast.makeText(GasolinaActivity.this, "Selecione o total de veículos", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(HospedagemActivity.this);
 
-                GasolinaDAO dao = new GasolinaDAO(getApplicationContext());
-                GasolinaModel gasolina = new GasolinaModel();
-
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(GasolinaActivity.this);
-
-                gasolina.setViagem(idViagem);
-                gasolina.setKm(Double.parseDouble(totalKM));
-                gasolina.setKm_litro(Double.parseDouble(mediaKM));
-                gasolina.setCusto_medio(Double.parseDouble(custoMedio));
-                gasolina.setQntd_veiculo(Double.parseDouble(totalVeiculo));
+                hospedagem.setViagem(idViagem);
+                hospedagem.setCusto_noite(Double.parseDouble(custo));
+                hospedagem.setQtd_noite(Integer.parseInt(qtdNoite));
+                hospedagem.setQtd_quarto(Integer.parseInt(numQuarto));
 
                 try {
-                    dao.Insert(gasolina);
-                    Toast.makeText(GasolinaActivity.this, "Gasolina cadastrada com sucesso", Toast.LENGTH_SHORT).show();
-                    Intent it = new Intent(GasolinaActivity.this, TarifaActivity.class);
+                    dao.Insert(hospedagem);
+                    Toast.makeText(HospedagemActivity.this, "Hospedagem cadastrada com sucesso", Toast.LENGTH_SHORT).show();
+                    Intent it = new Intent(HospedagemActivity.this, HospedagemActivity.class);
                     it.putExtra("viagemId", idViagem);
                     startActivity(it);
                 } catch (Exception e) {
@@ -124,10 +114,10 @@ public class GasolinaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    Intent it = new Intent(GasolinaActivity.this, TarifaActivity.class);
+                    Intent it = new Intent(HospedagemActivity.this, HospedagemActivity.class);
                     it.putExtra("viagemId", idViagem);
                     startActivity(it);
-                    Toast.makeText(GasolinaActivity.this, "Etapa pulada com sucesso", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HospedagemActivity.this, "Etapa pulada com sucesso", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

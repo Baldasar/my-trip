@@ -32,7 +32,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Gasolina"
+            android:text="Tarifa Aérea"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -47,56 +47,32 @@
             android:layout_marginTop="20dp"
             android:contentDescription="Imagem da viagem"
             android:scaleType="centerCrop"
-            android:src="@drawable/viagem_carro" />
+            android:src="@drawable/tarifa_aerea" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="20dp" />
 
         <EditText
-            android:id="@+id/edtTotalKM"
+            android:id="@+id/edtCusto"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Total estimado de quilômetros"
+            android:hint="Custo estimado por pessoa"
             android:inputType="numberDecimal"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
             android:textCursorDrawable="@null" />
 
         <EditText
-            android:id="@+id/edtMediaKM"
+            android:id="@+id/edtQtdPessoa"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Média de quilômetros por litro"
+            android:hint="Quantidade pessoas"
             android:inputType="numberDecimal"
-            android:textColor="@color/black"
-            android:textColorHint="@color/black"
-            android:textCursorDrawable="@null" />
-
-        <EditText
-            android:id="@+id/edtCustoMedio"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Custo médio por litro"
-            android:inputType="numberDecimal"
-            android:textColor="@color/black"
-            android:textColorHint="@color/black"
-            android:textCursorDrawable="@null" />
-
-        <EditText
-            android:id="@+id/edtTotalVeiculo"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Total de veículos"
-            android:inputType="number"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
             android:textCursorDrawable="@null" />
