@@ -28,7 +28,7 @@ public class TarifaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tarifa);
 
         Intent it = getIntent();
-        Integer idViagem = it.getIntExtra("viagemId", 0);
+        long idViagem = it.getIntExtra("viagemId", 0);
 
         btnVoltar = findViewById(R.id.btnVoltar);
         btnContinuar = findViewById(R.id.btnContinuar);
@@ -91,7 +91,7 @@ public class TarifaActivity extends AppCompatActivity {
                 TarifaDAO dao = new TarifaDAO(getApplicationContext());
                 TarifaModel tarifa = new TarifaModel();
 
-                tarifa.setViagem(idViagem);
+                tarifa.setViagem(1);
                 tarifa.setCusto_pessoa(Double.parseDouble(custo));
                 tarifa.setQtd_pessoa(Integer.parseInt(qtdPessoa));
                 tarifa.setCusto_veiculo(Double.parseDouble(valorVeiculo));

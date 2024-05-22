@@ -54,7 +54,7 @@ public class GasolinaDAO extends AbstrataDAO{
         model.setKm(cursor.getDouble(2));
         model.setKm_litro(cursor.getDouble(3));
         model.setCusto_medio(cursor.getDouble(4));
-        model.setQntd_veiculo(cursor.getInt(5));
+        model.setQntd_veiculo(cursor.getDouble(5));
 
         return model;
     }

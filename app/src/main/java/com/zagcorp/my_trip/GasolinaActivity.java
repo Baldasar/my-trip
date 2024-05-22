@@ -29,7 +29,7 @@ public class GasolinaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gasolina);
 
         Intent it = getIntent();
-        Integer idViagem = it.getIntExtra("viagemId", 0);
+        long idViagem = it.getLongExtra("viagemId", 0);
 
         btnVoltar = findViewById(R.id.btnVoltar);
         btnContinuar = findViewById(R.id.btnContinuar);
@@ -49,7 +49,7 @@ public class GasolinaActivity extends AppCompatActivity {
                 builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent it = new Intent(GasolinaActivity.this, HomeActivity.class);
+                        Intent it = new Intent(GasolinaActivity.this, LocalTripActivity.class);
                         startActivity(it);
                     }
                 });
@@ -106,7 +106,7 @@ public class GasolinaActivity extends AppCompatActivity {
                 gasolina.setKm(Double.parseDouble(totalKM));
                 gasolina.setKm_litro(Double.parseDouble(mediaKM));
                 gasolina.setCusto_medio(Double.parseDouble(custoMedio));
-                gasolina.setQntd_veiculo(Integer.parseInt(totalVeiculo));
+                gasolina.setQntd_veiculo(Double.parseDouble(totalVeiculo));
 
                 try {
                     dao.Insert(gasolina);

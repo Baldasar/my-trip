@@ -41,10 +41,13 @@
             android:layout_marginBottom="16dp">
 
             <RelativeLayout
+                android:id="@+id/rl_gasolina"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
-                android:background="@drawable/border_card">
+                android:background="@drawable/border_card"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp">
 
                 <TextView
                     android:id="@+id/txt_nome_viagem"
@@ -95,6 +98,61 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/txt_qntd_veiculos"
+                    android:textSize="14sp"
+                    android:textColor="#888888"
+                    android:text="Valor total: "/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_tarifa_aerea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:background="@drawable/border_card"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp">
+
+                <TextView
+                    android:id="@+id/txt_nome_viagem_tarifa_aerea"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:text="Tarifa aérea"/>
+
+                <TextView
+                    android:id="@+id/txt_custo_estimado_pessoa"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txt_nome_viagem_tarifa_aerea"
+                    android:textSize="14sp"
+                    android:textColor="#888888"
+                    android:text="Custo estimado por pessoa: "/>
+
+                <TextView
+                    android:id="@+id/txt_quantidade_pessoas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txt_custo_estimado_pessoa"
+                    android:textSize="14sp"
+                    android:textColor="#888888"
+                    android:text="Quantidade de pessoas: "/>
+
+                <TextView
+                    android:id="@+id/txt_valor_veiculo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txt_quantidade_pessoas"
+                    android:textSize="14sp"
+                    android:textColor="#888888"
+                    android:text="Valor do veículo: "/>
+
+                <TextView
+                    android:id="@+id/txt_valor_total_tarifa_aerea"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txt_valor_veiculo"
                     android:textSize="14sp"
                     android:textColor="#888888"
                     android:text="Valor total: "/>

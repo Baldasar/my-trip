@@ -28,7 +28,7 @@ public class HospedagemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_hospedagem);
 
         Intent it = getIntent();
-        Integer idViagem = it.getIntExtra("viagemId", 0);
+        long idViagem = it.getIntExtra("viagemId", 0);
 
         btnVoltar = findViewById(R.id.btnVoltar);
         btnContinuar = findViewById(R.id.btnContinuar);
