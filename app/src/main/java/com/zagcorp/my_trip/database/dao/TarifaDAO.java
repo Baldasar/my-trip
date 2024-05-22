@@ -16,7 +16,8 @@ public class TarifaDAO extends AbstrataDAO{
             TarifaModel.COLUNA_ID,
             TarifaModel.COLUNA_VIAGEM,
             TarifaModel.COLUNA_CUSTO_PESSOA,
-            TarifaModel.COLUNA_QTD_PESSOA
+            TarifaModel.COLUNA_QTD_PESSOA,
+            TarifaModel.COLUNA_CUSTO_VEICULO
     };
 
     public TarifaDAO(Context context) {
@@ -33,6 +34,7 @@ public class TarifaDAO extends AbstrataDAO{
             values.put(TarifaModel.COLUNA_VIAGEM, model.getViagem());
             values.put(TarifaModel.COLUNA_CUSTO_PESSOA, model.getCusto_pessoa());
             values.put(TarifaModel.COLUNA_QTD_PESSOA, model.getQtd_pessoa());
+            values.put(TarifaModel.COLUNA_CUSTO_VEICULO, model.getCusto_veiculo());
 
             rowAffect = db.insert(TarifaModel.TABELA_NOME, null, values);
         } finally {
@@ -48,6 +50,7 @@ public class TarifaDAO extends AbstrataDAO{
         model.setViagem(cursor.getLong(1));
         model.setCusto_pessoa(cursor.getDouble(2));
         model.setQtd_pessoa(cursor.getLong(3));
+        model.setCusto_veiculo(cursor.getDouble(4));
 
         return model;
     }

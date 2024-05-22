@@ -29,7 +29,7 @@ public class GasolinaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gasolina);
 
         Intent it = getIntent();
-        Integer idViagem = it.getIntExtra("viagemId", 0);
+        long idViagem = it.getLongExtra("viagemId", 0);
 
         btnVoltar = findViewById(R.id.btnVoltar);
         btnContinuar = findViewById(R.id.btnContinuar);

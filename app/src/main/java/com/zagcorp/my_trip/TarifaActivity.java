@@ -20,7 +20,7 @@ import com.zagcorp.my_trip.database.model.TarifaModel;
 public class TarifaActivity extends AppCompatActivity {
     private FloatingActionButton btnVoltar;
     private Button btnContinuar, btnPularEtapa;
-    private EditText edtCusto, edtQtdPessoa;
+    private EditText edtCusto, edtQtdPessoa, edtValorVeiculo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,13 +28,14 @@ public class TarifaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tarifa);
 
         Intent it = getIntent();
-        Integer idViagem = it.getIntExtra("viagemId", 0);
+        long idViagem = it.getIntExtra("viagemId", 0);
 
         btnVoltar = findViewById(R.id.btnVoltar);
         btnContinuar = findViewById(R.id.btnContinuar);
         btnPularEtapa = findViewById(R.id.btnPularEtapa);
         edtCusto = findViewById(R.id.edtCusto);
         edtQtdPessoa = findViewById(R.id.edtQtdPessoa);
+        edtValorVeiculo = findViewById(R.id.edtValorVeiculo);
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,7 +47,7 @@ public class TarifaActivity extends AppCompatActivity {
                 builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent it = new Intent(TarifaActivity.this, GasolinaActivity.class);
+                        Intent it = new Intent(TarifaActivity.this, HomeActivity.class);
                         startActivity(it);
                     }
                 });
@@ -80,19 +81,25 @@ public class TarifaActivity extends AppCompatActivity {
                     return;
                 }
 
+                String valorVeiculo = edtValorVeiculo.getText().toString();
+
+                if (valorVeiculo.isEmpty()) {
+                    Toast.makeText(TarifaActivity.this, "Preencha o campo valor do veículo", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 TarifaDAO dao = new TarifaDAO(getApplicationContext());
                 TarifaModel tarifa = new TarifaModel();
 
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(TarifaActivity.this);
-
-                tarifa.setViagem(idViagem);
+                tarifa.setViagem(1);
                 tarifa.setCusto_pessoa(Double.parseDouble(custo));
                 tarifa.setQtd_pessoa(Integer.parseInt(qtdPessoa));
+                tarifa.setCusto_veiculo(Double.parseDouble(valorVeiculo));
 
                 try {
                     dao.Insert(tarifa);
                     Toast.makeText(TarifaActivity.this, "Tarifa cadastrada com sucesso", Toast.LENGTH_SHORT).show();
-                    Intent it = new Intent(TarifaActivity.this, TarifaActivity.class);
+                    Intent it = new Intent(TarifaActivity.this, HospedagemActivity.class);
                     it.putExtra("viagemId", idViagem);
                     startActivity(it);
                 } catch (Exception e) {
