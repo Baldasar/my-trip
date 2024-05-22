@@ -1,42 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginBottom="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
 
-    <TextView
-        android:id="@+id/textNomeViagem"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:text="Nome da Viagem"/>
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/textSubtitulo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textNomeViagem"
-        android:textSize="14sp"
-        android:textColor="#888888"
-        android:text="Subtítulo da Viagem"/>
+        <TextView
+            android:id="@+id/textNomeViagem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nome da Viagem"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/btnVerMais"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:text="Ver mais"/>
+        <TextView
+            android:id="@+id/textSubtitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textNomeViagem"
+            android:text="Subtítulo da Viagem"
+            android:textColor="#000000"
+            android:textSize="14sp" />
 
-    <TextView
-        android:id="@+id/textValor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textSubtitulo"
-        android:layout_marginTop="16dp"
-        android:text="Outro texto abaixo do subtítulo"
-        android:textSize="14sp"
-        android:textColor="#000000"/>
+        <TextView
+            android:id="@+id/novoSubtitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textSubtitulo"
+            android:text="Novo Subtítulo"
+            android:textColor="#000000"
+            android:textSize="14sp" />
 
-</RelativeLayout>
+        <Button
+            android:id="@+id/btnVerMais"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:text="Ver mais" />
+
+        <TextView
+            android:id="@+id/textValor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/novoSubtitulo"
+            android:layout_marginTop="16dp"
+            android:text="Outro texto abaixo do subtítulo"
+            android:textColor="#000000"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
