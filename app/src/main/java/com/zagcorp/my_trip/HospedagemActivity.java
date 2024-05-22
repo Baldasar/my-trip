@@ -28,7 +28,7 @@ public class HospedagemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_hospedagem);
 
         Intent it = getIntent();
-        Integer idViagem = it.getIntExtra("viagemId", 0);
+        Long idViagem = it.getLongExtra("viagemId", 0);
 
         btnVoltar = findViewById(R.id.btnVoltar);
         btnContinuar = findViewById(R.id.btnContinuar);
@@ -101,7 +101,7 @@ public class HospedagemActivity extends AppCompatActivity {
                 try {
                     dao.Insert(hospedagem);
                     Toast.makeText(HospedagemActivity.this, "Hospedagem cadastrada com sucesso", Toast.LENGTH_SHORT).show();
-                    Intent it = new Intent(HospedagemActivity.this, HospedagemActivity.class);
+                    Intent it = new Intent(HospedagemActivity.this, RefeicaoActivity.class);
                     it.putExtra("viagemId", idViagem);
                     startActivity(it);
                 } catch (Exception e) {
@@ -114,7 +114,7 @@ public class HospedagemActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    Intent it = new Intent(HospedagemActivity.this, HospedagemActivity.class);
+                    Intent it = new Intent(HospedagemActivity.this, RefeicaoActivity.class);
                     it.putExtra("viagemId", idViagem);
                     startActivity(it);
                     Toast.makeText(HospedagemActivity.this, "Etapa pulada com sucesso", Toast.LENGTH_SHORT).show();

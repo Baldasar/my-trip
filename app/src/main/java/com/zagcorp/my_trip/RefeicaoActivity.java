@@ -14,18 +14,18 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.zagcorp.my_trip.database.dao.TarifaDAO;
-import com.zagcorp.my_trip.database.model.TarifaModel;
+import com.zagcorp.my_trip.database.dao.RefeicaoDAO;
+import com.zagcorp.my_trip.database.model.RefeicaoModel;
 
-public class TarifaActivity extends AppCompatActivity {
+public class RefeicaoActivity extends AppCompatActivity {
     private FloatingActionButton btnVoltar;
     private Button btnContinuar, btnPularEtapa;
-    private EditText edtCusto, edtQtdPessoa;
+    private EditText edtCusto, edtDiarias;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tarifa);
+        setContentView(R.layout.activity_refeicao);
 
         Intent it = getIntent();
         Long idViagem = it.getLongExtra("viagemId", 0);
@@ -34,19 +34,19 @@ public class TarifaActivity extends AppCompatActivity {
         btnContinuar = findViewById(R.id.btnContinuar);
         btnPularEtapa = findViewById(R.id.btnPularEtapa);
         edtCusto = findViewById(R.id.edtCusto);
-        edtQtdPessoa = findViewById(R.id.edtQtdPessoa);
+        edtDiarias = findViewById(R.id.edtDiarias);
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(TarifaActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(RefeicaoActivity.this);
                 builder.setTitle("Confirmar Saída");
                 builder.setMessage("Tem certeza que deseja sair?");
 
                 builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent it = new Intent(TarifaActivity.this, GasolinaActivity.class);
+                        Intent it = new Intent(RefeicaoActivity.this, HospedagemActivity.class);
                         startActivity(it);
                     }
                 });
@@ -69,30 +69,30 @@ public class TarifaActivity extends AppCompatActivity {
                 String custo = edtCusto.getText().toString();
 
                 if (custo.isEmpty()) {
-                    Toast.makeText(TarifaActivity.this, "Preencha o campo custo estimado por pessoa", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RefeicaoActivity.this, "Preencha o campo custo estimado", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                String qtdPessoa = edtQtdPessoa.getText().toString();
+                String qtdDiarias = edtDiarias.getText().toString();
 
-                if (qtdPessoa.isEmpty()) {
-                    Toast.makeText(TarifaActivity.this, "Preencha o campo quantidade pessoas", Toast.LENGTH_SHORT).show();
+                if (qtdDiarias.isEmpty()) {
+                    Toast.makeText(RefeicaoActivity.this, "Preencha o campo refeições diárias", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                TarifaDAO dao = new TarifaDAO(getApplicationContext());
-                TarifaModel tarifa = new TarifaModel();
+                RefeicaoDAO dao = new RefeicaoDAO(getApplicationContext());
+                RefeicaoModel refeicao = new RefeicaoModel();
 
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(TarifaActivity.this);
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(RefeicaoActivity.this);
 
-                tarifa.setViagem(idViagem);
-                tarifa.setCusto_pessoa(Double.parseDouble(custo));
-                tarifa.setQtd_pessoa(Integer.parseInt(qtdPessoa));
+                refeicao.setViagem(idViagem);
+                refeicao.setCusto_estimado(Double.parseDouble(custo));
+                refeicao.setQtd_refeicao(Integer.parseInt(qtdDiarias));
 
                 try {
-                    dao.Insert(tarifa);
-                    Toast.makeText(TarifaActivity.this, "Tarifa cadastrada com sucesso", Toast.LENGTH_SHORT).show();
-                    Intent it = new Intent(TarifaActivity.this, TarifaActivity.class);
+                    dao.Insert(refeicao);
+                    Toast.makeText(RefeicaoActivity.this, "Refeicao cadastrada com sucesso", Toast.LENGTH_SHORT).show();
+                    Intent it = new Intent(RefeicaoActivity.this, RefeicaoActivity.class);
                     it.putExtra("viagemId", idViagem);
                     startActivity(it);
                 } catch (Exception e) {
@@ -105,10 +105,10 @@ public class TarifaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    Intent it = new Intent(TarifaActivity.this, HospedagemActivity.class);
+                    Intent it = new Intent(RefeicaoActivity.this, RefeicaoActivity.class);
                     it.putExtra("viagemId", idViagem);
                     startActivity(it);
-                    Toast.makeText(TarifaActivity.this, "Etapa pulada com sucesso", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RefeicaoActivity.this, "Etapa pulada com sucesso", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
