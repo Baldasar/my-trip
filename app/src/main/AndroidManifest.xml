@@ -19,6 +19,8 @@
         <activity android:name=".TarifaActivity"/>
         <activity android:name=".HospedagemActivity"/>
         <activity android:name=".DetailsActicity"/>
+        <activity android:name=".RefeicaoActivity"/>
+        <activity android:name=".EntreterimentoActivity"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">
