@@ -92,7 +92,7 @@ public class RefeicaoActivity extends AppCompatActivity {
                 try {
                     dao.Insert(refeicao);
                     Toast.makeText(RefeicaoActivity.this, "Refeicao cadastrada com sucesso", Toast.LENGTH_SHORT).show();
-                    Intent it = new Intent(RefeicaoActivity.this, RefeicaoActivity.class);
+                    Intent it = new Intent(RefeicaoActivity.this, EntretenimentoActivity.class);
                     it.putExtra("viagemId", idViagem);
                     startActivity(it);
                 } catch (Exception e) {
@@ -105,7 +105,7 @@ public class RefeicaoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    Intent it = new Intent(RefeicaoActivity.this, RefeicaoActivity.class);
+                    Intent it = new Intent(RefeicaoActivity.this, EntretenimentoActivity.class);
                     it.putExtra("viagemId", idViagem);
                     startActivity(it);
                     Toast.makeText(RefeicaoActivity.this, "Etapa pulada com sucesso", Toast.LENGTH_SHORT).show();

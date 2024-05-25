@@ -41,29 +41,36 @@
             android:layout_width="match_parent"
             android:layout_height="20dp" />
 
-        <EditText
-            android:id="@+id/edtAtividade"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Atividade"
-            android:inputType="text"
-            android:textColor="@color/black"
-            android:textColorHint="@color/black"
-            android:textCursorDrawable="@null" />
+<!--        <EditText-->
+<!--            android:id="@+id/edtAtividade"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_marginBottom="10dp"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:hint="Atividade"-->
+<!--            android:inputType="text"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textColorHint="@color/black"-->
+<!--            android:textCursorDrawable="@null" />-->
 
-        <EditText
-            android:id="@+id/edtValor"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+<!--        <EditText-->
+<!--            android:id="@+id/edtValor"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_marginBottom="10dp"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:hint="Valor"-->
+<!--            android:inputType="numberDecimal"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textColorHint="@color/black"-->
+<!--            android:textCursorDrawable="@null" />-->
+
+        <LinearLayout
+            android:id="@+id/layoutAtividades"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Valor"
-            android:inputType="numberDecimal"
-            android:textColor="@color/black"
-            android:textColorHint="@color/black"
-            android:textCursorDrawable="@null" />
+            android:orientation="vertical"
+            android:layout_marginTop="20dp" />
 
         <ImageButton
             android:id="@+id/btnAdicionarAtividade"
@@ -72,13 +79,6 @@
             android:contentDescription="Adicionar atividade"
             android:padding="16dp"
             android:src="@android:drawable/ic_input_add" />
-
-        <LinearLayout
-            android:id="@+id/layoutAtividades"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="20dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
