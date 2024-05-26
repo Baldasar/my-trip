@@ -46,50 +46,27 @@ public class GasolinaDAO extends AbstrataDAO{
         return rowAffect;
     }
 
-    public long Edit(GasolinaModel model, Long viagem) throws  SQLException{
-        long rowAffect = 0;
+    public int update(GasolinaModel model) throws SQLException {
+        int rowAffect = 0;
 
         try {
             Open();
 
             ContentValues values = new ContentValues();
-            values.put(GasolinaModel.COLUNA_VIAGEM, model.getViagem());
             values.put(GasolinaModel.COLUNA_KM, model.getKm());
             values.put(GasolinaModel.COLUNA_KM_LITRO, model.getKm_litro());
             values.put(GasolinaModel.COLUNA_CUSTO_MEDIO, model.getCusto_medio());
             values.put(GasolinaModel.COLUNA_QNTD_VEICULO, model.getQntd_veiculo());
 
-            String selection = GasolinaModel.COLUNA_VIAGEM + " = ?";
-            String[] selectionArgs = {viagem.toString()};
+            String whereClause = GasolinaModel.COLUNA_ID + " = ?";
+            String[] whereArgs = {String.valueOf(model.getId())};
 
-            rowAffect = db.update(GasolinaModel.TABELA_NOME, values, selection, selectionArgs);
+            rowAffect = db.update(GasolinaModel.TABELA_NOME, values, whereClause, whereArgs);
         } finally {
             Close();
         }
 
         return rowAffect;
-    }
-
-    public int verificaGasolina(Long viagem) throws SQLException {
-        int count = 0;
-
-        try {
-            Open();
-            String selection = GasolinaModel.COLUNA_VIAGEM + " = ?";
-            String[] selectionArgs = {viagem.toString()};
-
-            String query = "SELECT COUNT(*) FROM " + GasolinaModel.TABELA_NOME + " WHERE " + selection;
-            Cursor cursor = db.rawQuery(query, selectionArgs);
-
-            if (cursor.moveToFirst()) {
-                count = cursor.getInt(0);
-            }
-            cursor.close();
-        } finally {
-            Close();
-        }
-
-        return count;
     }
 
     public final GasolinaModel CursorToStructure(Cursor cursor) {
@@ -124,26 +101,25 @@ public class GasolinaDAO extends AbstrataDAO{
         return lista;
     }
 
-    public GasolinaModel buscaGasolinaPorIdViagem(Long idViagem) throws SQLException {
-        GasolinaModel gasolina = null;
+    public List<GasolinaModel> buscaGasolinaByIdViagem(long idViagem) throws SQLException {
+        List<GasolinaModel> lista = new ArrayList<>();
 
         try {
             Open();
             String selection = GasolinaModel.COLUNA_VIAGEM + " = ?";
-            String[] selectionArgs = {idViagem.toString()};
+            String[] selectionArgs = {String.valueOf(idViagem)};
 
             Cursor cursor = db.query(GasolinaModel.TABELA_NOME, colunas, selection, selectionArgs, null, null, null);
 
-            if (cursor.moveToFirst()) {
-                gasolina = CursorToStructure(cursor);
+            while (cursor.moveToNext()) {
+                lista.add(CursorToStructure(cursor));
             }
         } finally {
             Close();
         }
 
-        return gasolina;
+        return lista;
     }
-
     public void deleteByViagemId(long idViagem) throws SQLException {
         try {
             Open();

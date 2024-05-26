@@ -18,11 +18,12 @@ import com.zagcorp.my_trip.database.dao.RefeicaoDAO;
 import com.zagcorp.my_trip.database.model.RefeicaoModel;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class RefeicaoActivity extends AppCompatActivity {
     private FloatingActionButton btnVoltar;
     private Button btnContinuar, btnPularEtapa;
-    private EditText edtCusto, edtDiarias;
+    private EditText edtCusto, edtDiarias,edtViajantes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,26 +32,41 @@ public class RefeicaoActivity extends AppCompatActivity {
 
         Intent it = getIntent();
         Long idViagem = it.getLongExtra("viagemId", 0);
+        Boolean editar = it.getBooleanExtra("editar", false);
 
         btnVoltar = findViewById(R.id.btnVoltar);
         btnContinuar = findViewById(R.id.btnContinuar);
         btnPularEtapa = findViewById(R.id.btnPularEtapa);
         edtCusto = findViewById(R.id.edtCusto);
         edtDiarias = findViewById(R.id.edtDiarias);
+        edtViajantes = findViewById(R.id.edtViajantes);
 
-        preencherCampos(idViagem);
+        if(editar) {
+            try {
+                RefeicaoDAO dao = new RefeicaoDAO(getApplicationContext());
+                List<RefeicaoModel> refeicoes = dao.buscaRefeicao("" + idViagem);
+
+                for (RefeicaoModel refeicao : refeicoes) {
+                    edtCusto.setText(String.valueOf(refeicao.getCusto_estimado()));
+                    edtDiarias.setText(String.valueOf(refeicao.getQtd_refeicao()));
+                    edtViajantes.setText(String.valueOf(refeicao.getQtd_viajantes()));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(RefeicaoActivity.this);
                 builder.setTitle("Confirmar Retorno");
-                builder.setMessage("Tem certeza que deseja retornar a tela de hospedagem?");
+                builder.setMessage("Tem certeza que deseja retornar?");
 
                 builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent it = new Intent(RefeicaoActivity.this, HospedagemActivity.class);
+                        Intent it = new Intent(RefeicaoActivity.this, HomeActivity.class);
                         startActivity(it);
                     }
                 });
@@ -71,7 +87,6 @@ public class RefeicaoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String custo = edtCusto.getText().toString();
-                int totalRefeicao = 0;
 
                 if (custo.isEmpty()) {
                     Toast.makeText(RefeicaoActivity.this, "Preencha o campo custo estimado", Toast.LENGTH_SHORT).show();
@@ -85,13 +100,14 @@ public class RefeicaoActivity extends AppCompatActivity {
                     return;
                 }
 
-                RefeicaoDAO dao = new RefeicaoDAO(getApplicationContext());
+                String qtdViajantes = edtViajantes.getText().toString();
 
-                try {
-                    totalRefeicao = dao.verificaRefeicao(idViagem);
-                } catch (SQLException e) {
-                    e.printStackTrace();
+                if (qtdViajantes.isEmpty()) {
+                    Toast.makeText(RefeicaoActivity.this, "Preencha o campo quantidade de viajantes", Toast.LENGTH_SHORT).show();
+                    return;
                 }
+
+                RefeicaoDAO dao = new RefeicaoDAO(getApplicationContext());
 
                 RefeicaoModel refeicao = new RefeicaoModel();
 
@@ -100,18 +116,26 @@ public class RefeicaoActivity extends AppCompatActivity {
                 refeicao.setViagem(idViagem);
                 refeicao.setCusto_estimado(Double.parseDouble(custo));
                 refeicao.setQtd_refeicao(Integer.parseInt(qtdDiarias));
+                refeicao.setQtd_viajantes(Integer.parseInt(qtdViajantes));
 
                 try {
-                    if (totalRefeicao > 0) {
-                        dao.Edit(refeicao, idViagem);
-                        Toast.makeText(RefeicaoActivity.this, "Refeicao editada com sucesso", Toast.LENGTH_SHORT).show();
+                    if(editar) {
+                        RefeicaoModel refeicaoEdit = new RefeicaoModel();
+                        refeicaoEdit.setViagem(idViagem);
+                        refeicaoEdit.setCusto_estimado(Double.parseDouble(custo));
+                        refeicaoEdit.setQtd_refeicao(Integer.parseInt(qtdDiarias));
+                        refeicaoEdit.setQtd_viajantes(Integer.parseInt(qtdViajantes));
+                        dao.update(refeicaoEdit);
+
+                        Toast.makeText(RefeicaoActivity.this, "Refeicao atualizada com sucesso", Toast.LENGTH_SHORT).show();
+                        Intent it = new Intent(RefeicaoActivity.this, HomeActivity.class);
+                        startActivity(it);
                     } else {
                         dao.Insert(refeicao);
                         Toast.makeText(RefeicaoActivity.this, "Refeicao cadastrada com sucesso", Toast.LENGTH_SHORT).show();
+                        Intent it = new Intent(RefeicaoActivity.this, HomeActivity.class);
+                        startActivity(it);
                     }
-                    Intent it = new Intent(RefeicaoActivity.this, EntretenimentoActivity.class);
-                    it.putExtra("viagemId", idViagem);
-                    startActivity(it);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -121,10 +145,14 @@ public class RefeicaoActivity extends AppCompatActivity {
         btnPularEtapa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                excluirDados(idViagem);
                 try {
-                    Intent it = new Intent(RefeicaoActivity.this, EntretenimentoActivity.class);
+                    Intent it = new Intent(RefeicaoActivity.this, HomeActivity.class);
                     it.putExtra("viagemId", idViagem);
+                    if(editar) {
+                        RefeicaoDAO dao = new RefeicaoDAO(getApplicationContext());
+                        dao.deleteByViagemId(idViagem);
+                        it.putExtra("editar", true);
+                    }
                     startActivity(it);
                     Toast.makeText(RefeicaoActivity.this, "Etapa pulada com sucesso", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
@@ -132,27 +160,6 @@ public class RefeicaoActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-    private void excluirDados(long idViagem) {
-        RefeicaoDAO dao = new RefeicaoDAO(getApplicationContext());
-        try {
-            dao.deleteByViagemId(idViagem);  // Excluir atividades existentes
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void preencherCampos(long idViagem) {
-        RefeicaoDAO dao = new RefeicaoDAO(getApplicationContext());
-        try {
-            RefeicaoModel refeicao = dao.buscaRefeicaoPorIdViagem(idViagem);
-            if (refeicao != null) {
-                edtCusto.setText(String.valueOf(refeicao.getCusto_estimado()));
-                edtDiarias.setText(String.valueOf(refeicao.getQtd_refeicao()));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
 }

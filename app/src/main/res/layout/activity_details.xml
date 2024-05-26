@@ -1,165 +1,287 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnVoltar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_margin="16dp"
-            android:src="@drawable/back_arrow_icon" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnVoltar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="16dp"
+                android:src="@drawable/back_arrow_icon" />
+
+            <TextView
+                android:id="@+id/txt_titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:text="Detalhes da Viagem"
+                android:textSize="24sp" />
+        </RelativeLayout>
 
         <TextView
-            android:id="@+id/txt_titulo"
+            android:id="@+id/txt_valor_total_global"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:text="Detalhes da Viagem"
-            android:textSize="24sp" />
-    </RelativeLayout>
+            android:layout_marginStart="16dp"
+            android:text="Valor total: "
+            android:textSize="18sp" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="9">
-
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/rl_gasolina"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp">
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/border_card"
+            android:padding="16dp">
 
-            <RelativeLayout
-                android:id="@+id/rl_gasolina"
+            <TextView
+                android:id="@+id/txt_nome_viagem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:background="@drawable/border_card"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp">
+                android:text="Gasolina"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/txt_nome_viagem"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:text="Gasolina"/>
-
-                <TextView
-                    android:id="@+id/txt_total_km"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/txt_nome_viagem"
-                    android:textSize="14sp"
-                    android:textColor="#888888"
-                    android:text="Total estimado de quilômetros: "/>
-
-                <TextView
-                    android:id="@+id/txt_media_km_litro"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/txt_total_km"
-                    android:textSize="14sp"
-                    android:textColor="#888888"
-                    android:text="Média de quilômetros por litro: "/>
-
-                <TextView
-                    android:id="@+id/txt_custo_litro"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/txt_media_km_litro"
-                    android:textSize="14sp"
-                    android:textColor="#888888"
-                    android:text="Custo médio por litro: "/>
-
-                <TextView
-                    android:id="@+id/txt_qntd_veiculos"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/txt_custo_litro"
-                    android:textSize="14sp"
-                    android:textColor="#888888"
-                    android:text="Quantidade de veículos: "/>
-
-                <TextView
-                    android:id="@+id/txt_valor_total"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/txt_qntd_veiculos"
-                    android:textSize="14sp"
-                    android:textColor="#888888"
-                    android:text="Valor total: "/>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rl_tarifa_aerea"
+            <TextView
+                android:id="@+id/txt_total_km"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:background="@drawable/border_card"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp">
+                android:layout_below="@id/txt_nome_viagem"
+                android:text="Total estimado de quilômetros: "
+                android:textColor="#888888"
+                android:textSize="14sp" />
 
-                <TextView
-                    android:id="@+id/txt_nome_viagem_tarifa_aerea"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:text="Tarifa aérea"/>
+            <TextView
+                android:id="@+id/txt_media_km_litro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txt_total_km"
+                android:text="Média de quilômetros por litro: "
+                android:textColor="#888888"
+                android:textSize="14sp" />
 
-                <TextView
-                    android:id="@+id/txt_custo_estimado_pessoa"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/txt_nome_viagem_tarifa_aerea"
-                    android:textSize="14sp"
-                    android:textColor="#888888"
-                    android:text="Custo estimado por pessoa: "/>
+            <TextView
+                android:id="@+id/txt_custo_litro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txt_media_km_litro"
+                android:text="Custo médio por litro: "
+                android:textColor="#888888"
+                android:textSize="14sp" />
 
-                <TextView
-                    android:id="@+id/txt_quantidade_pessoas"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/txt_custo_estimado_pessoa"
-                    android:textSize="14sp"
-                    android:textColor="#888888"
-                    android:text="Quantidade de pessoas: "/>
+            <TextView
+                android:id="@+id/txt_qntd_veiculos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txt_custo_litro"
+                android:text="Quantidade de veículos: "
+                android:textColor="#888888"
+                android:textSize="14sp" />
 
-                <TextView
-                    android:id="@+id/txt_valor_veiculo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/txt_quantidade_pessoas"
-                    android:textSize="14sp"
-                    android:textColor="#888888"
-                    android:text="Valor do veículo: "/>
+            <TextView
+                android:id="@+id/txt_valor_total"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txt_qntd_veiculos"
+                android:text="Valor total: "
+                android:textColor="#888888"
+                android:textSize="14sp" />
 
-                <TextView
-                    android:id="@+id/txt_valor_total_tarifa_aerea"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/txt_valor_veiculo"
-                    android:textSize="14sp"
-                    android:textColor="#888888"
-                    android:text="Valor total: "/>
-            </RelativeLayout>
 
-        </LinearLayout>
+        </RelativeLayout>
 
-    </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rl_tarifa_aerea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/border_card"
+            android:padding="16dp">
 
-</LinearLayout>
+            <TextView
+                android:id="@+id/txt_nome_viagem_tarifa_aerea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tarifa aérea"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_custo_estimado_pessoa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txt_nome_viagem_tarifa_aerea"
+                android:text="Custo estimado por pessoa: "
+                android:textColor="#888888"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txt_quantidade_pessoas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txt_custo_estimado_pessoa"
+                android:text="Quantidade de pessoas: "
+                android:textColor="#888888"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txt_valor_veiculo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txt_quantidade_pessoas"
+                android:text="Valor do veículo: "
+                android:textColor="#888888"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txt_valor_total_tarifa_aerea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txt_valor_veiculo"
+                android:text="Valor total: "
+                android:textColor="#888888"
+                android:textSize="14sp" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_refeicoes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/border_card"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/txt_nome_viagem_refeicoes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Refeições"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_custo_estimado_refeicao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txt_nome_viagem_refeicoes"
+                android:text="Custo estimado por refeição: "
+                android:textColor="#888888"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txt_quantidade_refeicoes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txt_custo_estimado_refeicao"
+                android:text="Quantidade de refeições por dia: "
+                android:textColor="#888888"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txt_quantidade_viajantes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txt_quantidade_refeicoes"
+                android:text="Quantidade de viajantes: "
+                android:textColor="#888888"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txt_duracao_viagem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txt_quantidade_viajantes"
+                android:text="Duração da viagem: "
+                android:textColor="#888888"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txt_valor_total_refeicoes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txt_duracao_viagem"
+                android:text="Valor total: "
+                android:textColor="#888888"
+                android:textSize="14sp" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_hospedagem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/border_card"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/txt_nome_viagem_hospedagem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Hospedagem"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_custo_medio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txt_nome_viagem_hospedagem"
+                android:text="Custo médio: "
+                android:textColor="#888888"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txt_total_noites"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txt_custo_medio"
+                android:text="Total de noites: "
+                android:textColor="#888888"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txt_total_quartos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txt_total_noites"
+                android:text="Total de quartos: "
+                android:textColor="#888888"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txt_valor_total_hospedagem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txt_total_quartos"
+                android:text="Valor total: "
+                android:textColor="#888888"
+                android:textSize="14sp" />
+        </RelativeLayout>
+    </LinearLayout>
+</ScrollView>

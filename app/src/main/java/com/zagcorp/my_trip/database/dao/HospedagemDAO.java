@@ -47,23 +47,21 @@ public class HospedagemDAO extends AbstrataDAO{
         return rowAffect;
     }
 
-    public long Edit(HospedagemModel model, Long viagem) throws  SQLException{
-        long rowAffect = 0;
+    public int update(HospedagemModel model) throws SQLException {
+        int rowAffect = 0;
 
         try {
             Open();
 
             ContentValues values = new ContentValues();
-            values.put(HospedagemModel.COLUNA_VIAGEM, model.getViagem());
             values.put(HospedagemModel.COLUNA_CUSTO_NOITE, model.getCusto_noite());
             values.put(HospedagemModel.COLUNA_QTD_NOITE, model.getQtd_noite());
             values.put(HospedagemModel.COLUNA_QTD_QUARTO, model.getQtd_quarto());
 
+            String where = HospedagemModel.COLUNA_ID + " = ?";
+            String[] whereArgs = {String.valueOf(model.getId())};
 
-            String selection = HospedagemModel.COLUNA_VIAGEM + " = ?";
-            String[] selectionArgs = {viagem.toString()};
-
-            rowAffect = db.update(HospedagemModel.TABELA_NOME, values, selection, selectionArgs);
+            rowAffect = db.update(HospedagemModel.TABELA_NOME, values, where, whereArgs);
         } finally {
             Close();
         }

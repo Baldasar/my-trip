@@ -59,7 +59,7 @@
             android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Custo estimado"
+            android:hint="Custo estimado por refeição"
             android:inputType="numberDecimal"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
@@ -73,6 +73,18 @@
             android:layout_height="wrap_content"
             android:hint="Refeições diárias"
             android:inputType="numberDecimal"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:textCursorDrawable="@null" />
+
+        <EditText
+            android:id="@+id/edtViajantes"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Quantidade de viajantes"
+            android:inputType="number"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
             android:textCursorDrawable="@null" />

@@ -14,12 +14,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.zagcorp.my_trip.database.dao.EntretenimentoDAO;
 import com.zagcorp.my_trip.database.dao.GasolinaDAO;
-import com.zagcorp.my_trip.database.dao.ViagemDAO;
 import com.zagcorp.my_trip.database.model.GasolinaModel;
 
-import java.sql.SQLException;
+import java.util.List;
 
 public class GasolinaActivity extends AppCompatActivity {
     private FloatingActionButton btnVoltar;
@@ -33,6 +31,7 @@ public class GasolinaActivity extends AppCompatActivity {
 
         Intent it = getIntent();
         Long idViagem = it.getLongExtra("viagemId", 0);
+        Boolean editar = it.getBooleanExtra("editar", false);
 
         btnVoltar = findViewById(R.id.btnVoltar);
         btnContinuar = findViewById(R.id.btnContinuar);
@@ -42,20 +41,33 @@ public class GasolinaActivity extends AppCompatActivity {
         edtCustoMedio = findViewById(R.id.edtCustoMedio);
         edtTotalVeiculo = findViewById(R.id.edtTotalVeiculo);
 
-        preencherCampos(idViagem);
+        if(editar) {
+            try {
+                GasolinaDAO dao = new GasolinaDAO(getApplicationContext());
+                List<GasolinaModel> gasolinas = dao.buscaGasolinaByIdViagem(idViagem);
+
+                for ( GasolinaModel gasolina : gasolinas ) {
+                    edtTotalKM.setText(String.valueOf(gasolina.getKm()));
+                    edtMediaKM.setText(String.valueOf(gasolina.getKm_litro()));
+                    edtCustoMedio.setText(String.valueOf(gasolina.getCusto_medio()));
+                    edtTotalVeiculo.setText(String.valueOf(gasolina.getQntd_veiculo()));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(GasolinaActivity.this);
-                builder.setTitle("Confirmar Retorno");
-                builder.setMessage("Tem certeza que deseja retornar?");
+                builder.setTitle("Confirmar Saída");
+                builder.setMessage("Tem certeza que deseja sair?");
 
                 builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent it = new Intent(GasolinaActivity.this, LocalTripActivity.class);
-                        it.putExtra("viagemId", idViagem);
+                        Intent it = new Intent(GasolinaActivity.this, HomeActivity.class);
                         startActivity(it);
                     }
                 });
@@ -76,7 +88,6 @@ public class GasolinaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String totalKM = edtTotalKM.getText().toString();
-                int totalGasolina = 0;
 
                 if (totalKM.isEmpty()) {
                     Toast.makeText(GasolinaActivity.this, "Preencha o campo total estimado de quilômetros", Toast.LENGTH_SHORT).show();
@@ -105,13 +116,6 @@ public class GasolinaActivity extends AppCompatActivity {
                 }
 
                 GasolinaDAO dao = new GasolinaDAO(getApplicationContext());
-
-                try {
-                    totalGasolina = dao.verificaGasolina(idViagem);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-
                 GasolinaModel gasolina = new GasolinaModel();
 
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(GasolinaActivity.this);
@@ -123,16 +127,29 @@ public class GasolinaActivity extends AppCompatActivity {
                 gasolina.setQntd_veiculo(Double.parseDouble(totalVeiculo));
 
                 try {
-                    if (totalGasolina > 0) {
-                        dao.Edit(gasolina, idViagem);
-                        Toast.makeText(GasolinaActivity.this, "Gasolina editada com sucesso", Toast.LENGTH_SHORT).show();
+                    if(editar) {
+                        GasolinaModel gasolinaEdit = new GasolinaModel();
+                        gasolinaEdit.setId(idViagem);
+                        gasolinaEdit.setViagem(idViagem);
+                        gasolinaEdit.setKm(Double.parseDouble(totalKM));
+                        gasolinaEdit.setKm_litro(Double.parseDouble(mediaKM));
+                        gasolinaEdit.setCusto_medio(Double.parseDouble(custoMedio));
+                        gasolinaEdit.setQntd_veiculo(Double.parseDouble(totalVeiculo));
+
+                        int rowsAffected = dao.update(gasolinaEdit);
+
+                        Toast.makeText(GasolinaActivity.this, "Gasolina atualizada com sucesso", Toast.LENGTH_SHORT).show();
+                        Intent it = new Intent(GasolinaActivity.this, TarifaActivity.class);
+                        it.putExtra("viagemId", idViagem);
+                        it.putExtra("editar", true);
+                        startActivity(it);
                     } else {
                         dao.Insert(gasolina);
                         Toast.makeText(GasolinaActivity.this, "Gasolina cadastrada com sucesso", Toast.LENGTH_SHORT).show();
+                        Intent it = new Intent(GasolinaActivity.this, TarifaActivity.class);
+                        it.putExtra("viagemId", idViagem);
+                        startActivity(it);
                     }
-                    Intent it = new Intent(GasolinaActivity.this, TarifaActivity.class);
-                    it.putExtra("viagemId", idViagem);
-                    startActivity(it);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -142,10 +159,14 @@ public class GasolinaActivity extends AppCompatActivity {
         btnPularEtapa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                excluirDados(idViagem);
                 try {
                     Intent it = new Intent(GasolinaActivity.this, TarifaActivity.class);
                     it.putExtra("viagemId", idViagem);
+                    if(editar) {
+                        GasolinaDAO dao = new GasolinaDAO(getApplicationContext());
+                        dao.deleteByViagemId(idViagem);
+                        it.putExtra("editar", true);
+                    }
                     startActivity(it);
                     Toast.makeText(GasolinaActivity.this, "Etapa pulada com sucesso", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
@@ -154,28 +175,4 @@ public class GasolinaActivity extends AppCompatActivity {
             }
         });
     }
-    private void excluirDados(long idViagem) {
-        GasolinaDAO dao = new GasolinaDAO(getApplicationContext());
-        try {
-            dao.deleteByViagemId(idViagem);  // Excluir atividades existentes
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void preencherCampos(long idViagem) {
-        GasolinaDAO dao = new GasolinaDAO(getApplicationContext());
-        try {
-            GasolinaModel gasolina = dao.buscaGasolinaPorIdViagem(idViagem);
-            if (gasolina != null) {
-                edtTotalKM.setText(String.valueOf(gasolina.getKm()));
-                edtMediaKM.setText(String.valueOf(gasolina.getKm_litro()));
-                edtCustoMedio.setText(String.valueOf(gasolina.getCusto_medio()));
-                edtTotalVeiculo.setText(String.valueOf(gasolina.getQntd_veiculo()));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
 }

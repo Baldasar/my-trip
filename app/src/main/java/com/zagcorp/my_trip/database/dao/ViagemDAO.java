@@ -46,30 +46,6 @@ public class ViagemDAO extends AbstrataDAO{
         return rowAffect;
     }
 
-    public long Edit(ViagemModel model, Long viagem) throws  SQLException{
-        long rowAffect = 0;
-
-        try {
-            Open();
-
-            ContentValues values = new ContentValues();
-            values.put(ViagemModel.COLUNA_USUARIO, model.getUsuario());
-            values.put(ViagemModel.COLUNA_TITULO, model.getTitulo());
-            values.put(ViagemModel.COLUNA_LOCAL, model.getLocal());
-            values.put(ViagemModel.COLUNA_DURACAO, model.getDuracao());
-
-
-            String selection = ViagemModel.COLUNA_ID + " = ?";
-            String[] selectionArgs = {viagem.toString()};
-
-            rowAffect = db.update(ViagemModel.TABELA_NOME, values, selection, selectionArgs);
-        } finally {
-            Close();
-        }
-
-        return rowAffect;
-    }
-
     public List<ViagemModel> buscaViagens(String usuario) throws SQLException {
         List<ViagemModel> lista = new ArrayList<>();
 
@@ -90,8 +66,8 @@ public class ViagemDAO extends AbstrataDAO{
         return lista;
     }
 
-    public ViagemModel buscaViagemPorId(Long idViagem) throws SQLException {
-        ViagemModel viagem = null;
+    public List<ViagemModel> buscaViagensPorId(Long idViagem) throws SQLException {
+        List<ViagemModel> lista = new ArrayList<>();
 
         try {
             Open();
@@ -100,8 +76,8 @@ public class ViagemDAO extends AbstrataDAO{
 
             Cursor cursor = db.query(ViagemModel.TABELA_NOME, colunas, selection, selectionArgs, null, null, null);
 
-            if (cursor != null && cursor.moveToFirst()) {
-                viagem = CursorToStructure(cursor);
+            while (cursor.moveToNext()) {
+                lista.add(CursorToStructure(cursor));
             }
 
             if (cursor != null) {
@@ -111,29 +87,30 @@ public class ViagemDAO extends AbstrataDAO{
             Close();
         }
 
-        return viagem;
+        return lista;
     }
 
-    public int verificaViagem(Long viagem) throws SQLException {
-        int count = 0;
+    public int update(ViagemModel model) throws SQLException {
+        int rowsAffected = 0;
 
         try {
             Open();
-            String selection = ViagemModel.COLUNA_ID + " = ?";
-            String[] selectionArgs = {viagem.toString()};
 
-            String query = "SELECT COUNT(*) FROM " + ViagemModel.TABELA_NOME + " WHERE " + selection;
-            Cursor cursor = db.rawQuery(query, selectionArgs);
+            ContentValues values = new ContentValues();
+            values.put(ViagemModel.COLUNA_USUARIO, model.getUsuario());
+            values.put(ViagemModel.COLUNA_TITULO, model.getTitulo());
+            values.put(ViagemModel.COLUNA_LOCAL, model.getLocal());
+            values.put(ViagemModel.COLUNA_DURACAO, model.getDuracao());
 
-            if (cursor.moveToFirst()) {
-                count = cursor.getInt(0);
-            }
-            cursor.close();
+            String whereClause = ViagemModel.COLUNA_ID + " = ?";
+            String[] whereArgs = {String.valueOf(model.getId())};
+
+            rowsAffected = db.update(ViagemModel.TABELA_NOME, values, whereClause, whereArgs);
         } finally {
             Close();
         }
 
-        return count;
+        return rowsAffected;
     }
 
     public final ViagemModel CursorToStructure(Cursor cursor) {
@@ -156,5 +133,29 @@ public class ViagemDAO extends AbstrataDAO{
         } finally {
             Close();
         }
+    }
+
+    public String getDuracaoViagem(Long idViagem) throws SQLException {
+        String duracao = null;
+
+        try {
+            Open();
+            String selection = ViagemModel.COLUNA_ID + " = ?";
+            String[] selectionArgs = {String.valueOf(idViagem)};
+
+            Cursor cursor = db.query(ViagemModel.TABELA_NOME, new String[]{ViagemModel.COLUNA_DURACAO}, selection, selectionArgs, null, null, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                duracao = cursor.getString(0);
+            }
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        } finally {
+            Close();
+        }
+
+        return duracao;
     }
 }
