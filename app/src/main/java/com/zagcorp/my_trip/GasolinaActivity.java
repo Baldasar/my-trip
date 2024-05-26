@@ -23,6 +23,7 @@ public class GasolinaActivity extends AppCompatActivity {
     private FloatingActionButton btnVoltar;
     private Button btnContinuar, btnPularEtapa;
     private EditText edtTotalKM, edtMediaKM, edtCustoMedio, edtTotalVeiculo;
+    private Long gasolinaId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,8 @@ public class GasolinaActivity extends AppCompatActivity {
                     edtMediaKM.setText(String.valueOf(gasolina.getKm_litro()));
                     edtCustoMedio.setText(String.valueOf(gasolina.getCusto_medio()));
                     edtTotalVeiculo.setText(String.valueOf(gasolina.getQntd_veiculo()));
+
+                    gasolinaId = gasolina.getId();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -129,14 +132,14 @@ public class GasolinaActivity extends AppCompatActivity {
                 try {
                     if(editar) {
                         GasolinaModel gasolinaEdit = new GasolinaModel();
-                        gasolinaEdit.setId(idViagem);
+                        gasolinaEdit.setId(gasolinaId);
                         gasolinaEdit.setViagem(idViagem);
                         gasolinaEdit.setKm(Double.parseDouble(totalKM));
                         gasolinaEdit.setKm_litro(Double.parseDouble(mediaKM));
                         gasolinaEdit.setCusto_medio(Double.parseDouble(custoMedio));
                         gasolinaEdit.setQntd_veiculo(Double.parseDouble(totalVeiculo));
 
-                        int rowsAffected = dao.update(gasolinaEdit);
+                        dao.update(gasolinaEdit);
 
                         Toast.makeText(GasolinaActivity.this, "Gasolina atualizada com sucesso", Toast.LENGTH_SHORT).show();
                         Intent it = new Intent(GasolinaActivity.this, TarifaActivity.class);

@@ -23,6 +23,7 @@ public class HospedagemActivity extends AppCompatActivity {
     private FloatingActionButton btnVoltar;
     private Button btnContinuar, btnPularEtapa;
     private EditText edtCusto, edtQtdNoite, edtNumQuarto;
+    private Long hospedagemId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,7 @@ public class HospedagemActivity extends AppCompatActivity {
                     edtCusto.setText(String.valueOf(hospedagem.getCusto_noite()));
                     edtQtdNoite.setText(String.valueOf(hospedagem.getQtd_noite()));
                     edtNumQuarto.setText(String.valueOf(hospedagem.getQtd_quarto()));
+                    hospedagemId = hospedagem.getId();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -120,10 +122,11 @@ public class HospedagemActivity extends AppCompatActivity {
                     if(editar) {
                         HospedagemModel hospedagemEdit = new HospedagemModel();
                         hospedagemEdit.setViagem(idViagem);
+                        hospedagemEdit.setId(hospedagemId);
                         hospedagemEdit.setCusto_noite(Double.parseDouble(custo));
                         hospedagemEdit.setQtd_noite(Integer.parseInt(qtdNoite));
                         hospedagemEdit.setQtd_quarto(Integer.parseInt(numQuarto));
-                        int rowsAffected = dao.update(hospedagemEdit);
+                        dao.update(hospedagemEdit);
 
                         Toast.makeText(HospedagemActivity.this, "Hospedagem atualizada com sucesso", Toast.LENGTH_SHORT).show();
                         Intent it = new Intent(HospedagemActivity.this, RefeicaoActivity.class);

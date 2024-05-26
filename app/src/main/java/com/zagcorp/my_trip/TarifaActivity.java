@@ -23,6 +23,7 @@ public class TarifaActivity extends AppCompatActivity {
     private FloatingActionButton btnVoltar;
     private Button btnContinuar, btnPularEtapa;
     private EditText edtCusto, edtQtdPessoa, edtValorVeiculo;
+    private Long tarifaid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,7 @@ public class TarifaActivity extends AppCompatActivity {
                     edtCusto.setText(String.valueOf(tarifa.getCusto_pessoa()));
                     edtQtdPessoa.setText(String.valueOf(tarifa.getQtd_pessoa()));
                     edtValorVeiculo.setText(String.valueOf(tarifa.getCusto_veiculo()));
+                    tarifaid = tarifa.getId();
                 }
 
             } catch (Exception e) {
@@ -118,11 +120,12 @@ public class TarifaActivity extends AppCompatActivity {
                 try {
                     if (editar) {
                         TarifaModel tarifaEdit = new TarifaModel();
+                        tarifaEdit.setId(tarifaid);
                         tarifaEdit.setViagem(idViagem);
                         tarifaEdit.setCusto_pessoa(Double.parseDouble(custo));
                         tarifaEdit.setQtd_pessoa(Integer.parseInt(qtdPessoa));
                         tarifaEdit.setCusto_veiculo(Double.parseDouble(valorVeiculo));
-                        int rowsAffected = dao.update(tarifaEdit);
+                        dao.update(tarifaEdit);
 
                         Toast.makeText(TarifaActivity.this, "Tarifa atualizada com sucesso", Toast.LENGTH_SHORT).show();
                         Intent it = new Intent(TarifaActivity.this, HospedagemActivity.class);

@@ -24,6 +24,7 @@ public class RefeicaoActivity extends AppCompatActivity {
     private FloatingActionButton btnVoltar;
     private Button btnContinuar, btnPularEtapa;
     private EditText edtCusto, edtDiarias,edtViajantes;
+    private Long refeicaoId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,7 @@ public class RefeicaoActivity extends AppCompatActivity {
                     edtCusto.setText(String.valueOf(refeicao.getCusto_estimado()));
                     edtDiarias.setText(String.valueOf(refeicao.getQtd_refeicao()));
                     edtViajantes.setText(String.valueOf(refeicao.getQtd_viajantes()));
+                    refeicaoId = refeicao.getId();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -111,8 +113,6 @@ public class RefeicaoActivity extends AppCompatActivity {
 
                 RefeicaoModel refeicao = new RefeicaoModel();
 
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(RefeicaoActivity.this);
-
                 refeicao.setViagem(idViagem);
                 refeicao.setCusto_estimado(Double.parseDouble(custo));
                 refeicao.setQtd_refeicao(Integer.parseInt(qtdDiarias));
@@ -121,6 +121,7 @@ public class RefeicaoActivity extends AppCompatActivity {
                 try {
                     if(editar) {
                         RefeicaoModel refeicaoEdit = new RefeicaoModel();
+                        refeicaoEdit.setId(refeicaoId);
                         refeicaoEdit.setViagem(idViagem);
                         refeicaoEdit.setCusto_estimado(Double.parseDouble(custo));
                         refeicaoEdit.setQtd_refeicao(Integer.parseInt(qtdDiarias));

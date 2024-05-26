@@ -134,7 +134,7 @@ public class LocalTripActivity extends AppCompatActivity {
                         viagemEdit.setTitulo(title);
                         viagemEdit.setLocal(localTrip);
                         viagemEdit.setDuracao(duration);
-                        int rowsAffected = dao.update(viagemEdit);
+                        dao.update(viagemEdit);
 
                         Toast.makeText(LocalTripActivity.this, "Viagem atualizada com sucesso", Toast.LENGTH_SHORT).show();
                         Intent it = new Intent(LocalTripActivity.this, GasolinaActivity.class);
