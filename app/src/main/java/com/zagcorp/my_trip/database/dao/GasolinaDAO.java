@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.zagcorp.my_trip.database.helper.DBOpenHelper;
-import com.zagcorp.my_trip.database.model.UsuarioModel;
 import com.zagcorp.my_trip.database.model.GasolinaModel;
 
 import java.sql.SQLException;
@@ -47,6 +46,52 @@ public class GasolinaDAO extends AbstrataDAO{
         return rowAffect;
     }
 
+    public long Edit(GasolinaModel model, Long viagem) throws  SQLException{
+        long rowAffect = 0;
+
+        try {
+            Open();
+
+            ContentValues values = new ContentValues();
+            values.put(GasolinaModel.COLUNA_VIAGEM, model.getViagem());
+            values.put(GasolinaModel.COLUNA_KM, model.getKm());
+            values.put(GasolinaModel.COLUNA_KM_LITRO, model.getKm_litro());
+            values.put(GasolinaModel.COLUNA_CUSTO_MEDIO, model.getCusto_medio());
+            values.put(GasolinaModel.COLUNA_QNTD_VEICULO, model.getQntd_veiculo());
+
+            String selection = GasolinaModel.COLUNA_VIAGEM + " = ?";
+            String[] selectionArgs = {viagem.toString()};
+
+            rowAffect = db.update(GasolinaModel.TABELA_NOME, values, selection, selectionArgs);
+        } finally {
+            Close();
+        }
+
+        return rowAffect;
+    }
+
+    public int verificaGasolina(Long viagem) throws SQLException {
+        int count = 0;
+
+        try {
+            Open();
+            String selection = GasolinaModel.COLUNA_VIAGEM + " = ?";
+            String[] selectionArgs = {viagem.toString()};
+
+            String query = "SELECT COUNT(*) FROM " + GasolinaModel.TABELA_NOME + " WHERE " + selection;
+            Cursor cursor = db.rawQuery(query, selectionArgs);
+
+            if (cursor.moveToFirst()) {
+                count = cursor.getInt(0);
+            }
+            cursor.close();
+        } finally {
+            Close();
+        }
+
+        return count;
+    }
+
     public final GasolinaModel CursorToStructure(Cursor cursor) {
         GasolinaModel model = new GasolinaModel();
         model.setId(cursor.getLong(0));
@@ -77,5 +122,36 @@ public class GasolinaDAO extends AbstrataDAO{
         }
 
         return lista;
+    }
+
+    public GasolinaModel buscaGasolinaPorIdViagem(Long idViagem) throws SQLException {
+        GasolinaModel gasolina = null;
+
+        try {
+            Open();
+            String selection = GasolinaModel.COLUNA_VIAGEM + " = ?";
+            String[] selectionArgs = {idViagem.toString()};
+
+            Cursor cursor = db.query(GasolinaModel.TABELA_NOME, colunas, selection, selectionArgs, null, null, null);
+
+            if (cursor.moveToFirst()) {
+                gasolina = CursorToStructure(cursor);
+            }
+        } finally {
+            Close();
+        }
+
+        return gasolina;
+    }
+
+    public void deleteByViagemId(long idViagem) throws SQLException {
+        try {
+            Open();
+            String whereClause = GasolinaModel.COLUNA_VIAGEM + " = ?";
+            String[] whereArgs = {String.valueOf(idViagem)};
+            db.delete(GasolinaModel.TABELA_NOME, whereClause, whereArgs);
+        } finally {
+            Close();
+        }
     }
 }

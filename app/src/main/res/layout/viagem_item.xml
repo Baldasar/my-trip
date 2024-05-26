@@ -46,8 +46,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
+            android:backgroundTint="@color/preto"
             android:text="Ver mais" />
+
+        <Button
+            android:id="@+id/btnExcluir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="50dp"
+            android:layout_marginRight="5dp"
+            android:backgroundTint="@color/vermelhoClaro"
+            android:text="Excluir" />
 
         <TextView
             android:id="@+id/textValor"

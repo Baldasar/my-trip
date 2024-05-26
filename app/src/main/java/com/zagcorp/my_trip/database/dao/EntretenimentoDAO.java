@@ -6,6 +6,7 @@ import android.database.Cursor;
 
 import com.zagcorp.my_trip.database.helper.DBOpenHelper;
 import com.zagcorp.my_trip.database.model.EntretenimentoModel;
+import com.zagcorp.my_trip.database.model.GasolinaModel;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -42,6 +43,51 @@ public class EntretenimentoDAO extends AbstrataDAO{
         return rowAffect;
     }
 
+    public long Edit(EntretenimentoModel model, Long viagem) throws  SQLException{
+        long rowAffect = 0;
+
+        try {
+            Open();
+
+            ContentValues values = new ContentValues();
+            values.put(EntretenimentoModel.COLUNA_VIAGEM, model.getViagem());
+            values.put(EntretenimentoModel.COLUNA_ATIVIDADE, model.getAtividade());
+            values.put(EntretenimentoModel.COLUNA_VALOR, model.getValor());
+
+
+            String selection = EntretenimentoModel.COLUNA_VIAGEM + " = ?";
+            String[] selectionArgs = {viagem.toString()};
+
+            rowAffect = db.update(EntretenimentoModel.TABELA_NOME, values, selection, selectionArgs);
+        } finally {
+            Close();
+        }
+
+        return rowAffect;
+    }
+
+    public int verificaEntretenimento(Long viagem) throws SQLException {
+        int count = 0;
+
+        try {
+            Open();
+            String selection = EntretenimentoModel.COLUNA_VIAGEM + " = ?";
+            String[] selectionArgs = {viagem.toString()};
+
+            String query = "SELECT COUNT(*) FROM " + EntretenimentoModel.TABELA_NOME + " WHERE " + selection;
+            Cursor cursor = db.rawQuery(query, selectionArgs);
+
+            if (cursor.moveToFirst()) {
+                count = cursor.getInt(0);
+            }
+            cursor.close();
+        } finally {
+            Close();
+        }
+
+        return count;
+    }
+
     public final EntretenimentoModel CursorToStructure(Cursor cursor) {
         EntretenimentoModel model = new EntretenimentoModel();
         model.setId(cursor.getLong(0));
@@ -70,5 +116,16 @@ public class EntretenimentoDAO extends AbstrataDAO{
         }
 
         return lista;
+    }
+    //excluir
+    public void deleteByViagemId(long idViagem) throws SQLException {
+        try {
+            Open();
+            String whereClause = EntretenimentoModel.COLUNA_VIAGEM + " = ?";
+            String[] whereArgs = {String.valueOf(idViagem)};
+            db.delete(EntretenimentoModel.TABELA_NOME, whereClause, whereArgs);
+        } finally {
+            Close();
+        }
     }
 }

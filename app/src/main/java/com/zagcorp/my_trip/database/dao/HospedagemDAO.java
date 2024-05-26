@@ -5,7 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.zagcorp.my_trip.database.helper.DBOpenHelper;
+import com.zagcorp.my_trip.database.model.EntretenimentoModel;
+import com.zagcorp.my_trip.database.model.GasolinaModel;
 import com.zagcorp.my_trip.database.model.HospedagemModel;
+import com.zagcorp.my_trip.database.model.RefeicaoModel;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -44,6 +47,52 @@ public class HospedagemDAO extends AbstrataDAO{
         return rowAffect;
     }
 
+    public long Edit(HospedagemModel model, Long viagem) throws  SQLException{
+        long rowAffect = 0;
+
+        try {
+            Open();
+
+            ContentValues values = new ContentValues();
+            values.put(HospedagemModel.COLUNA_VIAGEM, model.getViagem());
+            values.put(HospedagemModel.COLUNA_CUSTO_NOITE, model.getCusto_noite());
+            values.put(HospedagemModel.COLUNA_QTD_NOITE, model.getQtd_noite());
+            values.put(HospedagemModel.COLUNA_QTD_QUARTO, model.getQtd_quarto());
+
+
+            String selection = HospedagemModel.COLUNA_VIAGEM + " = ?";
+            String[] selectionArgs = {viagem.toString()};
+
+            rowAffect = db.update(HospedagemModel.TABELA_NOME, values, selection, selectionArgs);
+        } finally {
+            Close();
+        }
+
+        return rowAffect;
+    }
+
+    public int verificaHospedagem(Long viagem) throws SQLException {
+        int count = 0;
+
+        try {
+            Open();
+            String selection = HospedagemModel.COLUNA_VIAGEM + " = ?";
+            String[] selectionArgs = {viagem.toString()};
+
+            String query = "SELECT COUNT(*) FROM " + HospedagemModel.TABELA_NOME + " WHERE " + selection;
+            Cursor cursor = db.rawQuery(query, selectionArgs);
+
+            if (cursor.moveToFirst()) {
+                count = cursor.getInt(0);
+            }
+            cursor.close();
+        } finally {
+            Close();
+        }
+
+        return count;
+    }
+
     public final HospedagemModel CursorToStructure(Cursor cursor) {
         HospedagemModel model = new HospedagemModel();
         model.setId(cursor.getLong(0));
@@ -74,4 +123,35 @@ public class HospedagemDAO extends AbstrataDAO{
 
         return lista;
     }
+    public void deleteByViagemId(long idViagem) throws SQLException {
+        try {
+            Open();
+            String whereClause = HospedagemModel.COLUNA_VIAGEM + " = ?";
+            String[] whereArgs = {String.valueOf(idViagem)};
+            db.delete(HospedagemModel.TABELA_NOME, whereClause, whereArgs);
+        } finally {
+            Close();
+        }
+    }
+
+    public HospedagemModel buscaHospedagemPorIdViagem(Long idViagem) throws SQLException {
+        HospedagemModel hospedagem = null;
+
+        try {
+            Open();
+            String selection = HospedagemModel.COLUNA_VIAGEM + " = ?";
+            String[] selectionArgs = {idViagem.toString()};
+
+            Cursor cursor = db.query(HospedagemModel.TABELA_NOME, colunas, selection, selectionArgs, null, null, null);
+
+            if (cursor.moveToFirst()) {
+                hospedagem = CursorToStructure(cursor);
+            }
+        } finally {
+            Close();
+        }
+
+        return hospedagem;
+    }
+
 }

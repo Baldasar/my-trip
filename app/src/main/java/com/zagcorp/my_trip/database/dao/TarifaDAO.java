@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.zagcorp.my_trip.database.helper.DBOpenHelper;
+import com.zagcorp.my_trip.database.model.RefeicaoModel;
 import com.zagcorp.my_trip.database.model.TarifaModel;
 
 import java.sql.SQLException;
@@ -44,6 +45,73 @@ public class TarifaDAO extends AbstrataDAO{
         return rowAffect;
     }
 
+    public TarifaModel buscaTarifaPorIdViagem(Long idViagem) throws SQLException {
+        TarifaModel tarifa = null;
+
+        try {
+            Open();
+            String selection = TarifaModel.COLUNA_VIAGEM + " = ?";
+            String[] selectionArgs = {idViagem.toString()};
+
+            Cursor cursor = db.query(TarifaModel.TABELA_NOME, colunas, selection, selectionArgs, null, null, null);
+
+            if (cursor.moveToFirst()) {
+                tarifa = CursorToStructure(cursor);
+            }
+        } finally {
+            Close();
+        }
+
+        return tarifa;
+    }
+
+
+    public long Edit(TarifaModel model, Long viagem) throws  SQLException{
+        long rowAffect = 0;
+
+        try {
+            Open();
+
+            ContentValues values = new ContentValues();
+            values.put(TarifaModel.COLUNA_VIAGEM, model.getViagem());
+            values.put(TarifaModel.COLUNA_CUSTO_PESSOA, model.getCusto_pessoa());
+            values.put(TarifaModel.COLUNA_QTD_PESSOA, model.getQtd_pessoa());
+            values.put(TarifaModel.COLUNA_CUSTO_VEICULO, model.getCusto_veiculo());
+
+
+            String selection = TarifaModel.COLUNA_VIAGEM + " = ?";
+            String[] selectionArgs = {viagem.toString()};
+
+            rowAffect = db.update(TarifaModel.TABELA_NOME, values, selection, selectionArgs);
+        } finally {
+            Close();
+        }
+
+        return rowAffect;
+    }
+
+    public int verificaTarifa(Long viagem) throws SQLException {
+        int count = 0;
+
+        try {
+            Open();
+            String selection = TarifaModel.COLUNA_VIAGEM + " = ?";
+            String[] selectionArgs = {viagem.toString()};
+
+            String query = "SELECT COUNT(*) FROM " + TarifaModel.TABELA_NOME + " WHERE " + selection;
+            Cursor cursor = db.rawQuery(query, selectionArgs);
+
+            if (cursor.moveToFirst()) {
+                count = cursor.getInt(0);
+            }
+            cursor.close();
+        } finally {
+            Close();
+        }
+
+        return count;
+    }
+
     public final TarifaModel CursorToStructure(Cursor cursor) {
         TarifaModel model = new TarifaModel();
         model.setId(cursor.getLong(0));
@@ -73,5 +141,15 @@ public class TarifaDAO extends AbstrataDAO{
         }
 
         return lista;
+    }
+    public void deleteByViagemId(long idViagem) throws SQLException {
+        try {
+            Open();
+            String whereClause = TarifaModel.COLUNA_VIAGEM + " = ?";
+            String[] whereArgs = {String.valueOf(idViagem)};
+            db.delete(TarifaModel.TABELA_NOME, whereClause, whereArgs);
+        } finally {
+            Close();
+        }
     }
 }

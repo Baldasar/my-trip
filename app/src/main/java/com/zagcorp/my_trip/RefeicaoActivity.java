@@ -17,6 +17,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.zagcorp.my_trip.database.dao.RefeicaoDAO;
 import com.zagcorp.my_trip.database.model.RefeicaoModel;
 
+import java.sql.SQLException;
+
 public class RefeicaoActivity extends AppCompatActivity {
     private FloatingActionButton btnVoltar;
     private Button btnContinuar, btnPularEtapa;
@@ -36,12 +38,14 @@ public class RefeicaoActivity extends AppCompatActivity {
         edtCusto = findViewById(R.id.edtCusto);
         edtDiarias = findViewById(R.id.edtDiarias);
 
+        preencherCampos(idViagem);
+
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(RefeicaoActivity.this);
-                builder.setTitle("Confirmar Saída");
-                builder.setMessage("Tem certeza que deseja sair?");
+                builder.setTitle("Confirmar Retorno");
+                builder.setMessage("Tem certeza que deseja retornar a tela de hospedagem?");
 
                 builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
@@ -67,6 +71,7 @@ public class RefeicaoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String custo = edtCusto.getText().toString();
+                int totalRefeicao = 0;
 
                 if (custo.isEmpty()) {
                     Toast.makeText(RefeicaoActivity.this, "Preencha o campo custo estimado", Toast.LENGTH_SHORT).show();
@@ -81,6 +86,13 @@ public class RefeicaoActivity extends AppCompatActivity {
                 }
 
                 RefeicaoDAO dao = new RefeicaoDAO(getApplicationContext());
+
+                try {
+                    totalRefeicao = dao.verificaRefeicao(idViagem);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
                 RefeicaoModel refeicao = new RefeicaoModel();
 
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(RefeicaoActivity.this);
@@ -90,8 +102,13 @@ public class RefeicaoActivity extends AppCompatActivity {
                 refeicao.setQtd_refeicao(Integer.parseInt(qtdDiarias));
 
                 try {
-                    dao.Insert(refeicao);
-                    Toast.makeText(RefeicaoActivity.this, "Refeicao cadastrada com sucesso", Toast.LENGTH_SHORT).show();
+                    if (totalRefeicao > 0) {
+                        dao.Edit(refeicao, idViagem);
+                        Toast.makeText(RefeicaoActivity.this, "Refeicao editada com sucesso", Toast.LENGTH_SHORT).show();
+                    } else {
+                        dao.Insert(refeicao);
+                        Toast.makeText(RefeicaoActivity.this, "Refeicao cadastrada com sucesso", Toast.LENGTH_SHORT).show();
+                    }
                     Intent it = new Intent(RefeicaoActivity.this, EntretenimentoActivity.class);
                     it.putExtra("viagemId", idViagem);
                     startActivity(it);
@@ -104,6 +121,7 @@ public class RefeicaoActivity extends AppCompatActivity {
         btnPularEtapa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                excluirDados(idViagem);
                 try {
                     Intent it = new Intent(RefeicaoActivity.this, EntretenimentoActivity.class);
                     it.putExtra("viagemId", idViagem);
@@ -115,4 +133,26 @@ public class RefeicaoActivity extends AppCompatActivity {
             }
         });
     }
+    private void excluirDados(long idViagem) {
+        RefeicaoDAO dao = new RefeicaoDAO(getApplicationContext());
+        try {
+            dao.deleteByViagemId(idViagem);  // Excluir atividades existentes
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void preencherCampos(long idViagem) {
+        RefeicaoDAO dao = new RefeicaoDAO(getApplicationContext());
+        try {
+            RefeicaoModel refeicao = dao.buscaRefeicaoPorIdViagem(idViagem);
+            if (refeicao != null) {
+                edtCusto.setText(String.valueOf(refeicao.getCusto_estimado()));
+                edtDiarias.setText(String.valueOf(refeicao.getQtd_refeicao()));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

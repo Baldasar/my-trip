@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.zagcorp.my_trip.database.helper.DBOpenHelper;
+import com.zagcorp.my_trip.database.model.GasolinaModel;
+import com.zagcorp.my_trip.database.model.TarifaModel;
 import com.zagcorp.my_trip.database.model.ViagemModel;
 
 import java.sql.SQLException;
@@ -44,6 +46,30 @@ public class ViagemDAO extends AbstrataDAO{
         return rowAffect;
     }
 
+    public long Edit(ViagemModel model, Long viagem) throws  SQLException{
+        long rowAffect = 0;
+
+        try {
+            Open();
+
+            ContentValues values = new ContentValues();
+            values.put(ViagemModel.COLUNA_USUARIO, model.getUsuario());
+            values.put(ViagemModel.COLUNA_TITULO, model.getTitulo());
+            values.put(ViagemModel.COLUNA_LOCAL, model.getLocal());
+            values.put(ViagemModel.COLUNA_DURACAO, model.getDuracao());
+
+
+            String selection = ViagemModel.COLUNA_ID + " = ?";
+            String[] selectionArgs = {viagem.toString()};
+
+            rowAffect = db.update(ViagemModel.TABELA_NOME, values, selection, selectionArgs);
+        } finally {
+            Close();
+        }
+
+        return rowAffect;
+    }
+
     public List<ViagemModel> buscaViagens(String usuario) throws SQLException {
         List<ViagemModel> lista = new ArrayList<>();
 
@@ -64,6 +90,52 @@ public class ViagemDAO extends AbstrataDAO{
         return lista;
     }
 
+    public ViagemModel buscaViagemPorId(Long idViagem) throws SQLException {
+        ViagemModel viagem = null;
+
+        try {
+            Open();
+            String selection = ViagemModel.COLUNA_ID + " = ?";
+            String[] selectionArgs = {String.valueOf(idViagem)};
+
+            Cursor cursor = db.query(ViagemModel.TABELA_NOME, colunas, selection, selectionArgs, null, null, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                viagem = CursorToStructure(cursor);
+            }
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        } finally {
+            Close();
+        }
+
+        return viagem;
+    }
+
+    public int verificaViagem(Long viagem) throws SQLException {
+        int count = 0;
+
+        try {
+            Open();
+            String selection = ViagemModel.COLUNA_ID + " = ?";
+            String[] selectionArgs = {viagem.toString()};
+
+            String query = "SELECT COUNT(*) FROM " + ViagemModel.TABELA_NOME + " WHERE " + selection;
+            Cursor cursor = db.rawQuery(query, selectionArgs);
+
+            if (cursor.moveToFirst()) {
+                count = cursor.getInt(0);
+            }
+            cursor.close();
+        } finally {
+            Close();
+        }
+
+        return count;
+    }
+
     public final ViagemModel CursorToStructure(Cursor cursor) {
         ViagemModel model = new ViagemModel();
         model.setId(cursor.getLong(0));
@@ -73,5 +145,16 @@ public class ViagemDAO extends AbstrataDAO{
         model.setDuracao(cursor.getString(4));
 
         return model;
+    }
+
+    public void deleteByViagemId(long idViagem) throws SQLException {
+        try {
+            Open();
+            String whereClause = ViagemModel.COLUNA_ID + " = ?";
+            String[] whereArgs = {String.valueOf(idViagem)};
+            db.delete(ViagemModel.TABELA_NOME, whereClause, whereArgs);
+        } finally {
+            Close();
+        }
     }
 }

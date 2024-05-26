@@ -43,7 +43,7 @@ public class HomeActivity extends AppCompatActivity {
             List<ViagemModel> all = dao.buscaViagens(userId.toString());
             RecyclerView recyclerViewViagens = findViewById(R.id.recyclerViewViagens);
             recyclerViewViagens.setLayoutManager(new LinearLayoutManager(this));
-            ViagemAdapter adapter = new ViagemAdapter(all, this);
+            ViagemAdapter adapter = new ViagemAdapter(all, this, this);
             recyclerViewViagens.setAdapter(adapter);
         } catch (Exception e) {
             e.printStackTrace();

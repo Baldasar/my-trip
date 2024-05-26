@@ -15,11 +15,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.zagcorp.my_trip.database.dao.EntretenimentoDAO;
-import com.zagcorp.my_trip.database.dao.RefeicaoDAO;
 import com.zagcorp.my_trip.database.model.EntretenimentoModel;
-import com.zagcorp.my_trip.database.model.RefeicaoModel;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class EntretenimentoActivity extends AppCompatActivity {
 
@@ -27,7 +27,7 @@ public class EntretenimentoActivity extends AppCompatActivity {
     private int contadorAtividades = 0;
     private ArrayList<Integer> atividadeIds = new ArrayList<>();
     private ArrayList<Integer> valorIds = new ArrayList<>();
-    private Button btnContinuar, btnPularEtapa;
+    private Button btnContinuar, btnPularEtapa, btnVoltar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,9 @@ public class EntretenimentoActivity extends AppCompatActivity {
         Intent it = getIntent();
         Long idViagem = it.getLongExtra("viagemId", 0);
 
-        adicionarNovaAtividade();
+        btnVoltar = findViewById(R.id.btnVoltar);
+        btnContinuar = findViewById(R.id.btnContinuar);
+        btnPularEtapa = findViewById(R.id.btnPularEtapa);
 
         btnAdicionarAtividade.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,9 +57,54 @@ public class EntretenimentoActivity extends AppCompatActivity {
                 salvarAtividades(idViagem);
             }
         });
+
+        btnPularEtapa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                excluirAtividadesExistentes(idViagem);
+                Intent it = new Intent(EntretenimentoActivity.this, HomeActivity.class);
+                it.putExtra("viagemId", idViagem);
+                startActivity(it);
+            }
+        });
+
+        btnVoltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();  // This will close the current activity and go back to the previous one
+            }
+        });
+
+        // Carrega as atividades de entretenimento existentes para a viagem
+        carregarAtividades(idViagem);
+    }
+
+    private void carregarAtividades(long idViagem) {
+        EntretenimentoDAO dao = new EntretenimentoDAO(getApplicationContext());
+        List<EntretenimentoModel> atividades = new ArrayList<>();
+
+        try {
+            atividades = dao.buscaEntretenimento(String.valueOf(idViagem));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (atividades.isEmpty()) {
+            // Se não houver atividades, adicionar uma nova vazia
+            adicionarNovaAtividade();
+        } else {
+            // Se houver atividades, preencher os campos
+            for (EntretenimentoModel atividade : atividades) {
+                adicionarNovaAtividadeComDados(atividade.getAtividade(), String.valueOf(atividade.getValor()));
+            }
+        }
     }
 
     private void adicionarNovaAtividade() {
+        adicionarNovaAtividadeComDados("", "");
+    }
+
+    private void adicionarNovaAtividadeComDados(String atividadeTexto, String valorTexto) {
         contadorAtividades++;
 
         // Cria nova divisão
@@ -77,6 +124,7 @@ public class EntretenimentoActivity extends AppCompatActivity {
         novaAtividade.setPadding(8, 8, 8, 8);
         int idAtividade = View.generateViewId();
         novaAtividade.setId(idAtividade);
+        novaAtividade.setText(atividadeTexto);
         atividadeIds.add(idAtividade);
 
         // Cria novo EditText para Valor
@@ -89,6 +137,7 @@ public class EntretenimentoActivity extends AppCompatActivity {
         novoValor.setPadding(8, 8, 8, 8);
         int idValor = View.generateViewId();
         novoValor.setId(idValor);
+        novoValor.setText(valorTexto);
         valorIds.add(idValor);
 
         // Adiciona os novos EditTexts ao layout
@@ -110,8 +159,9 @@ public class EntretenimentoActivity extends AppCompatActivity {
                 return;
             }
         }
-
+        excluirAtividadesExistentes(idViagem);
         EntretenimentoDAO dao = new EntretenimentoDAO(getApplicationContext());
+
         EntretenimentoModel entretenimento = new EntretenimentoModel();
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(EntretenimentoActivity.this);
@@ -139,6 +189,15 @@ public class EntretenimentoActivity extends AppCompatActivity {
             Intent it = new Intent(EntretenimentoActivity.this, HomeActivity.class);
             it.putExtra("viagemId", idViagem);
             startActivity(it);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void excluirAtividadesExistentes(long idViagem) {
+        EntretenimentoDAO dao = new EntretenimentoDAO(getApplicationContext());
+        try {
+            dao.deleteByViagemId(idViagem);  // Excluir atividades existentes
         } catch (Exception e) {
             e.printStackTrace();
         }

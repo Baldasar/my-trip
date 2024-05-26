@@ -12,6 +12,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.zagcorp.my_trip.database.dao.EntretenimentoDAO;
+import com.zagcorp.my_trip.database.dao.GasolinaDAO;
+import com.zagcorp.my_trip.database.dao.HospedagemDAO;
+import com.zagcorp.my_trip.database.dao.RefeicaoDAO;
+import com.zagcorp.my_trip.database.dao.TarifaDAO;
+import com.zagcorp.my_trip.database.dao.ViagemDAO;
 import com.zagcorp.my_trip.database.model.ViagemModel;
 
 import java.util.List;
@@ -20,10 +26,12 @@ public class ViagemAdapter extends RecyclerView.Adapter<ViagemAdapter.ViewHolder
 
     private List<ViagemModel> viagemList;
     private Context context;
+    private HomeActivity homeActivity;
 
-    public ViagemAdapter(List<ViagemModel> viagemList, Context context) {
+    public ViagemAdapter(List<ViagemModel> viagemList, Context context, HomeActivity homeActivity) {
         this.viagemList = viagemList;
         this.context = context;
+        this.homeActivity = homeActivity;
     }
 
     @NonNull
@@ -49,6 +57,17 @@ public class ViagemAdapter extends RecyclerView.Adapter<ViagemAdapter.ViewHolder
                 context.startActivity(intent);
             }
         });
+
+        holder.btnExcluir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                excluirDados(viagem.getId());
+                Toast.makeText(context, "Viagem excluída com sucesso", Toast.LENGTH_SHORT).show();
+                if (homeActivity != null) {
+                    homeActivity.recreate(); // Certifique-se de que homeActivity não é nulo antes de chamar recreate()
+                }
+            }
+        });
     }
 
     @Override
@@ -58,7 +77,7 @@ public class ViagemAdapter extends RecyclerView.Adapter<ViagemAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView textNomeViagem, textSubtitulo, textValor, novoSubtitulo;
-        Button btnVerMais;
+        Button btnVerMais, btnExcluir;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -67,6 +86,55 @@ public class ViagemAdapter extends RecyclerView.Adapter<ViagemAdapter.ViewHolder
             novoSubtitulo = itemView.findViewById(R.id.novoSubtitulo);
             textValor = itemView.findViewById(R.id.textValor);
             btnVerMais = itemView.findViewById(R.id.btnVerMais);
+            btnExcluir = itemView.findViewById(R.id.btnExcluir);
+        }
+    }
+
+    private void excluirDados(long idViagem) {
+        GasolinaDAO gasolinaDao = new GasolinaDAO(context.getApplicationContext());
+        try {
+            gasolinaDao.deleteByViagemId(idViagem);  // Excluir gasolina
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        TarifaDAO tarifaDao = new TarifaDAO(context.getApplicationContext());
+        try {
+            tarifaDao.deleteByViagemId(idViagem);  // Excluir tarifa
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        HospedagemDAO hospedagemDao = new HospedagemDAO(context.getApplicationContext());
+        try {
+            hospedagemDao.deleteByViagemId(idViagem);  // Excluir hospedagem
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        RefeicaoDAO refeicaoDao = new RefeicaoDAO(context.getApplicationContext());
+        try {
+            refeicaoDao.deleteByViagemId(idViagem);  // Excluir refeicao
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        EntretenimentoDAO entretenimentoDao = new EntretenimentoDAO(context.getApplicationContext());
+        try {
+            entretenimentoDao.deleteByViagemId(idViagem);  // Excluir entretenimento
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ViagemDAO viagemDao = new ViagemDAO(context.getApplicationContext());
+        try {
+            viagemDao.deleteByViagemId(idViagem);  // Excluir viagem
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Toast.makeText(context, "Viagem excluída com sucesso", Toast.LENGTH_SHORT).show();
+        if (homeActivity != null) {
+            homeActivity.recreate(); // Certifique-se de que homeActivity não é nulo antes de chamar recreate()
         }
     }
 }
