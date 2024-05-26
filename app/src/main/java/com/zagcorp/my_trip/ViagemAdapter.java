@@ -68,6 +68,16 @@ public class ViagemAdapter extends RecyclerView.Adapter<ViagemAdapter.ViewHolder
                 }
             }
         });
+
+        holder.btnEditar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(context, LocalTripActivity.class);
+                it.putExtra("viagemId", viagem.getId());
+                it.putExtra("editar", true);
+                context.startActivity(it);
+            }
+        });
     }
 
     @Override
@@ -77,7 +87,7 @@ public class ViagemAdapter extends RecyclerView.Adapter<ViagemAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView textNomeViagem, textSubtitulo, textValor, novoSubtitulo;
-        Button btnVerMais, btnExcluir;
+        Button btnVerMais, btnExcluir, btnEditar;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -87,6 +97,7 @@ public class ViagemAdapter extends RecyclerView.Adapter<ViagemAdapter.ViewHolder
             textValor = itemView.findViewById(R.id.textValor);
             btnVerMais = itemView.findViewById(R.id.btnVerMais);
             btnExcluir = itemView.findViewById(R.id.btnExcluir);
+            btnEditar = itemView.findViewById(R.id.btnEditar);
         }
     }
 

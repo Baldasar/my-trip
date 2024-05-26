@@ -41,6 +41,7 @@ public class LocalTripActivity extends AppCompatActivity {
 
         Intent it = getIntent();
         Long idViagem = it.getLongExtra("viagemId", 0);
+        Boolean editar = it.getBooleanExtra("editar", false);
 
         btnVoltar = findViewById(R.id.btnVoltar);
         btnContinuar = findViewById(R.id.btnContinuar);
@@ -66,7 +67,9 @@ public class LocalTripActivity extends AppCompatActivity {
                 builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        excluirDados(idViagem);
+                        if (!editar) {
+                            excluirDados(idViagem);
+                        }
                         Intent it = new Intent(LocalTripActivity.this, HomeActivity.class);
                         startActivity(it);
                     }
