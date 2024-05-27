@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/branco">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,18 +17,18 @@
             android:layout_centerVertical="true"
             android:layout_margin="16dp"
             android:src="@drawable/back_arrow_icon" />
-
-        <TextView
-            android:id="@+id/txt_titulo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:text="Detalhes da Viagem"
-            android:textSize="24sp" />
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/txt_titulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:text="Detalhes da Viagem"
+        android:textSize="24sp"
+        android:textStyle="bold"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"

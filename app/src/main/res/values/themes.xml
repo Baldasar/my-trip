@@ -3,7 +3,17 @@
     <style name="Base.Theme.Mytrip" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+<!--        <item name="android:background">@drawable/border_card</item>-->
+
+    </style>
+
+    <style name="CardWithBorder">
+        <item name="android:background">@drawable/border_card</item>
+        <item name="android:backgroundTint">@color/white</item>
     </style>
 
     <style name="Theme.Mytrip" parent="Base.Theme.Mytrip" />
+    <style name="Theme" parent="Base.CardView">
+        <item name="android:background">@drawable/border_card</item>
+    </style>
 </resources>

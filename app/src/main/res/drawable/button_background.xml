@@ -1,0 +1,12 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/vermelhoEscuro"/>
+    <corners android:radius="4dp"/>
+    <stroke
+        android:width="4dp"
+        android:color="@color/preto"/>
+    <gradient android:type="sweep"
+        android:startColor="@color/vermelhoEscuro"
+        android:endColor="@color/vermelhoEscuro">
+    </gradient>
+
+</shape>
