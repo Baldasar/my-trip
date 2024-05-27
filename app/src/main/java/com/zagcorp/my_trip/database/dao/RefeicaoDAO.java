@@ -18,6 +18,7 @@ public class RefeicaoDAO extends AbstrataDAO{
             RefeicaoModel.COLUNA_VIAGEM,
             RefeicaoModel.COLUNA_CUSTO_ESTIMADO,
             RefeicaoModel.COLUNA_QTD_REFEICAO,
+            RefeicaoModel.COLUNA_QNTD_VIAJANTES
     };
 
     public RefeicaoDAO(Context context) {
@@ -34,6 +35,8 @@ public class RefeicaoDAO extends AbstrataDAO{
             values.put(RefeicaoModel.COLUNA_VIAGEM, model.getViagem());
             values.put(RefeicaoModel.COLUNA_CUSTO_ESTIMADO, model.getCusto_estimado());
             values.put(RefeicaoModel.COLUNA_QTD_REFEICAO, model.getQtd_refeicao());
+            values.put(RefeicaoModel.COLUNA_QNTD_VIAJANTES, model.getQtd_viajantes());
+
 
             rowAffect = db.insert(RefeicaoModel.TABELA_NOME, null, values);
         } finally {
@@ -43,8 +46,8 @@ public class RefeicaoDAO extends AbstrataDAO{
         return rowAffect;
     }
 
-    public long Edit(RefeicaoModel model, Long viagem) throws  SQLException{
-        long rowAffect = 0;
+    public int update(RefeicaoModel model) throws SQLException {
+        int rowAffect = 0;
 
         try {
             Open();
@@ -53,12 +56,12 @@ public class RefeicaoDAO extends AbstrataDAO{
             values.put(RefeicaoModel.COLUNA_VIAGEM, model.getViagem());
             values.put(RefeicaoModel.COLUNA_CUSTO_ESTIMADO, model.getCusto_estimado());
             values.put(RefeicaoModel.COLUNA_QTD_REFEICAO, model.getQtd_refeicao());
+            values.put(RefeicaoModel.COLUNA_QNTD_VIAJANTES, model.getQtd_viajantes());
 
+            String where = RefeicaoModel.COLUNA_ID + " = ?";
+            String[] whereArgs = {String.valueOf(model.getId())};
 
-            String selection = RefeicaoModel.COLUNA_VIAGEM + " = ?";
-            String[] selectionArgs = {viagem.toString()};
-
-            rowAffect = db.update(RefeicaoModel.TABELA_NOME, values, selection, selectionArgs);
+            rowAffect = db.update(RefeicaoModel.TABELA_NOME, values, where, whereArgs);
         } finally {
             Close();
         }
@@ -115,6 +118,7 @@ public class RefeicaoDAO extends AbstrataDAO{
         model.setViagem(cursor.getLong(1));
         model.setCusto_estimado(cursor.getDouble(2));
         model.setQtd_refeicao(cursor.getLong(3));
+        model.setQtd_viajantes(cursor.getLong(4));
 
         return model;
     }

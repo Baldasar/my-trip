@@ -43,7 +43,13 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         db.execSQL(HospedagemModel.DROP_TABLE);
         db.execSQL(EntretenimentoModel.DROP_TABLE);
         db.execSQL(RefeicaoModel.DROP_TABLE);
-
+//        db.execSQL(UsuarioModel.CREATE_TABLE);
+//        db.execSQL(ViagemModel.CREATE_TABLE);
+//        db.execSQL(GasolinaModel.CREATE_TABLE);
+//        db.execSQL(TarifaModel.CREATE_TABLE);
+//        db.execSQL(HospedagemModel.CREATE_TABLE);
+//        db.execSQL(EntretenimentoModel.CREATE_TABLE);
+//        db.execSQL(RefeicaoModel.CREATE_TABLE);
         onCreate(db);
     }
 

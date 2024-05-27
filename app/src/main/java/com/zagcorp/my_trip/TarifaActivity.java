@@ -19,12 +19,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.zagcorp.my_trip.database.dao.TarifaDAO;
 import com.zagcorp.my_trip.database.model.TarifaModel;
 
-import java.sql.SQLException;
+import java.util.List;
 
 public class TarifaActivity extends AppCompatActivity {
     private FloatingActionButton btnVoltar;
     private Button btnContinuar, btnPularEtapa;
     private EditText edtCusto, edtQtdPessoa, edtValorVeiculo;
+    private Long tarifaid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,7 @@ public class TarifaActivity extends AppCompatActivity {
 
         Intent it = getIntent();
         Long idViagem = it.getLongExtra("viagemId", 0);
+        Boolean editar = it.getBooleanExtra("editar", false);
 
         Window window = getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -47,19 +49,34 @@ public class TarifaActivity extends AppCompatActivity {
         edtQtdPessoa = findViewById(R.id.edtQtdPessoa);
         edtValorVeiculo = findViewById(R.id.edtValorVeiculo);
 
-        preencherCampos(idViagem);
+        if (editar) {
+            try {
+                TarifaDAO dao = new TarifaDAO(getApplicationContext());
+                List<TarifaModel> tarifas = dao.buscaTarifa("" + idViagem);
+
+                for (TarifaModel tarifa : tarifas) {
+                    edtCusto.setText(String.valueOf(tarifa.getCusto_pessoa()));
+                    edtQtdPessoa.setText(String.valueOf(tarifa.getQtd_pessoa()));
+                    edtValorVeiculo.setText(String.valueOf(tarifa.getCusto_veiculo()));
+                    tarifaid = tarifa.getId();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(TarifaActivity.this);
-                builder.setTitle("Confirmar Retorno");
-                builder.setMessage("Tem certeza que deseja retornar a tela de gasolina?");
+                builder.setTitle("Confirmar Saída");
+                builder.setMessage("Tem certeza que deseja sair?");
 
                 builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent it = new Intent(TarifaActivity.this, GasolinaActivity.class);
+                        Intent it = new Intent(TarifaActivity.this, HomeActivity.class);
                         startActivity(it);
                     }
                 });
@@ -80,7 +97,6 @@ public class TarifaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String custo = edtCusto.getText().toString();
-                int totalTarifa = 0;
 
                 if (custo.isEmpty()) {
                     Toast.makeText(TarifaActivity.this, "Preencha o campo custo estimado por pessoa", Toast.LENGTH_SHORT).show();
@@ -102,31 +118,35 @@ public class TarifaActivity extends AppCompatActivity {
                 }
 
                 TarifaDAO dao = new TarifaDAO(getApplicationContext());
-
-                try {
-                    totalTarifa = dao.verificaTarifa(idViagem);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-
                 TarifaModel tarifa = new TarifaModel();
 
-                tarifa.setViagem(1);
+                tarifa.setViagem(idViagem);
                 tarifa.setCusto_pessoa(Double.parseDouble(custo));
                 tarifa.setQtd_pessoa(Integer.parseInt(qtdPessoa));
                 tarifa.setCusto_veiculo(Double.parseDouble(valorVeiculo));
 
                 try {
-                    if (totalTarifa > 0) {
-                        dao.Edit(tarifa, idViagem);
-                        Toast.makeText(TarifaActivity.this, "Tarifa editada com sucesso", Toast.LENGTH_SHORT).show();
+                    if (editar) {
+                        TarifaModel tarifaEdit = new TarifaModel();
+                        tarifaEdit.setId(tarifaid);
+                        tarifaEdit.setViagem(idViagem);
+                        tarifaEdit.setCusto_pessoa(Double.parseDouble(custo));
+                        tarifaEdit.setQtd_pessoa(Integer.parseInt(qtdPessoa));
+                        tarifaEdit.setCusto_veiculo(Double.parseDouble(valorVeiculo));
+                        dao.update(tarifaEdit);
+
+                        Toast.makeText(TarifaActivity.this, "Tarifa atualizada com sucesso", Toast.LENGTH_SHORT).show();
+                        Intent it = new Intent(TarifaActivity.this, HospedagemActivity.class);
+                        it.putExtra("viagemId", idViagem);
+                        it.putExtra("editar", true);
+                        startActivity(it);
                     } else {
                         dao.Insert(tarifa);
                         Toast.makeText(TarifaActivity.this, "Tarifa cadastrada com sucesso", Toast.LENGTH_SHORT).show();
+                        Intent it = new Intent(TarifaActivity.this, HospedagemActivity.class);
+                        it.putExtra("viagemId", idViagem);
+                        startActivity(it);
                     }
-                    Intent it = new Intent(TarifaActivity.this, HospedagemActivity.class);
-                    it.putExtra("viagemId", idViagem);
-                    startActivity(it);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -136,10 +156,14 @@ public class TarifaActivity extends AppCompatActivity {
         btnPularEtapa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                excluirDados(idViagem);
                 try {
                     Intent it = new Intent(TarifaActivity.this, HospedagemActivity.class);
                     it.putExtra("viagemId", idViagem);
+                    if(editar) {
+                        TarifaDAO dao = new TarifaDAO(getApplicationContext());
+                        dao.deleteByViagemId(idViagem);
+                        it.putExtra("editar", true);
+                    }
                     startActivity(it);
                     Toast.makeText(TarifaActivity.this, "Etapa pulada com sucesso", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
@@ -148,27 +172,4 @@ public class TarifaActivity extends AppCompatActivity {
             }
         });
     }
-    private void excluirDados(long idViagem) {
-        TarifaDAO dao = new TarifaDAO(getApplicationContext());
-        try {
-            dao.deleteByViagemId(idViagem);  // Excluir atividades existentes
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void preencherCampos(long idViagem) {
-        TarifaDAO dao = new TarifaDAO(getApplicationContext());
-        try {
-            TarifaModel tarifa = dao.buscaTarifaPorIdViagem(idViagem);
-            if (tarifa != null) {
-                edtCusto.setText(String.valueOf(tarifa.getCusto_pessoa()));
-                edtQtdPessoa.setText(String.valueOf(tarifa.getQtd_pessoa()));
-                edtValorVeiculo.setText(String.valueOf(tarifa.getCusto_veiculo()));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
 }

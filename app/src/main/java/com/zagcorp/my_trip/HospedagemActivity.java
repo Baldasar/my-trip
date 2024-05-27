@@ -17,15 +17,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.zagcorp.my_trip.database.dao.HospedagemDAO;
-import com.zagcorp.my_trip.database.dao.TarifaDAO;
 import com.zagcorp.my_trip.database.model.HospedagemModel;
 
-import java.sql.SQLException;
+import java.util.List;
 
 public class HospedagemActivity extends AppCompatActivity {
     private FloatingActionButton btnVoltar;
     private Button btnContinuar, btnPularEtapa;
     private EditText edtCusto, edtQtdNoite, edtNumQuarto;
+    private Long hospedagemId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +40,7 @@ public class HospedagemActivity extends AppCompatActivity {
 
         Intent it = getIntent();
         Long idViagem = it.getLongExtra("viagemId", 0);
+        Boolean editar = it.getBooleanExtra("editar", false);
 
         btnVoltar = findViewById(R.id.btnVoltar);
         btnContinuar = findViewById(R.id.btnContinuar);
@@ -48,19 +49,33 @@ public class HospedagemActivity extends AppCompatActivity {
         edtQtdNoite = findViewById(R.id.edtQtdNoite);
         edtNumQuarto = findViewById(R.id.edtNumQuarto);
 
-        preencherCampos(idViagem);
+        if (editar) {
+            try {
+                HospedagemDAO dao = new HospedagemDAO(getApplicationContext());
+                List<HospedagemModel> Hospdedagens = dao.buscaHospedagem(""  + idViagem);
+
+                for (HospedagemModel hospedagem : Hospdedagens) {
+                    edtCusto.setText(String.valueOf(hospedagem.getCusto_noite()));
+                    edtQtdNoite.setText(String.valueOf(hospedagem.getQtd_noite()));
+                    edtNumQuarto.setText(String.valueOf(hospedagem.getQtd_quarto()));
+                    hospedagemId = hospedagem.getId();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(HospedagemActivity.this);
-                builder.setTitle("Confirmar Retorno");
-                builder.setMessage("Tem certeza que deseja retornar a tela de tarifa?");
+                builder.setTitle("Confirmar Saída");
+                builder.setMessage("Tem certeza que deseja sair?");
 
                 builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent it = new Intent(HospedagemActivity.this, TarifaActivity.class);
+                        Intent it = new Intent(HospedagemActivity.this, HomeActivity.class);
                         startActivity(it);
                     }
                 });
@@ -81,7 +96,6 @@ public class HospedagemActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String custo = edtCusto.getText().toString();
-                int totalHospedagem = 0;
 
                 if (custo.isEmpty()) {
                     Toast.makeText(HospedagemActivity.this, "Preencha o campo custo por noite", Toast.LENGTH_SHORT).show();
@@ -103,13 +117,6 @@ public class HospedagemActivity extends AppCompatActivity {
                 }
 
                 HospedagemDAO dao = new HospedagemDAO(getApplicationContext());
-
-                try {
-                    totalHospedagem = dao.verificaHospedagem(idViagem);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-
                 HospedagemModel hospedagem = new HospedagemModel();
 
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(HospedagemActivity.this);
@@ -120,30 +127,44 @@ public class HospedagemActivity extends AppCompatActivity {
                 hospedagem.setQtd_quarto(Integer.parseInt(numQuarto));
 
                 try {
-                    if (totalHospedagem > 0) {
-                        dao.Edit(hospedagem, idViagem);
-                        Toast.makeText(HospedagemActivity.this, "Hospedagem editada com sucesso", Toast.LENGTH_SHORT).show();
+                    if(editar) {
+                        HospedagemModel hospedagemEdit = new HospedagemModel();
+                        hospedagemEdit.setViagem(idViagem);
+                        hospedagemEdit.setId(hospedagemId);
+                        hospedagemEdit.setCusto_noite(Double.parseDouble(custo));
+                        hospedagemEdit.setQtd_noite(Integer.parseInt(qtdNoite));
+                        hospedagemEdit.setQtd_quarto(Integer.parseInt(numQuarto));
+                        dao.update(hospedagemEdit);
+
+                        Toast.makeText(HospedagemActivity.this, "Hospedagem atualizada com sucesso", Toast.LENGTH_SHORT).show();
+                        Intent it = new Intent(HospedagemActivity.this, RefeicaoActivity.class);
+                        it.putExtra("viagemId", idViagem);
+                        it.putExtra("editar", true);
+                        startActivity(it);
                     } else {
                         dao.Insert(hospedagem);
                         Toast.makeText(HospedagemActivity.this, "Hospedagem cadastrada com sucesso", Toast.LENGTH_SHORT).show();
+                        Intent it = new Intent(HospedagemActivity.this, RefeicaoActivity.class);
+                        it.putExtra("viagemId", idViagem);
+                        startActivity(it);
                     }
-                    Intent it = new Intent(HospedagemActivity.this, RefeicaoActivity.class);
-                    it.putExtra("viagemId", idViagem);
-                    startActivity(it);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-
         });
 
         btnPularEtapa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                excluirDados(idViagem);
                 try {
                     Intent it = new Intent(HospedagemActivity.this, RefeicaoActivity.class);
                     it.putExtra("viagemId", idViagem);
+                    if(editar) {
+                        HospedagemDAO dao = new HospedagemDAO(getApplicationContext());
+                        dao.deleteByViagemId(idViagem);
+                        it.putExtra("editar", true);
+                    }
                     startActivity(it);
                     Toast.makeText(HospedagemActivity.this, "Etapa pulada com sucesso", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
@@ -152,27 +173,4 @@ public class HospedagemActivity extends AppCompatActivity {
             }
         });
     }
-    private void excluirDados(long idViagem) {
-        HospedagemDAO dao = new HospedagemDAO(getApplicationContext());
-        try {
-            dao.deleteByViagemId(idViagem);  // Excluir atividades existentes
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void preencherCampos(long idViagem) {
-        HospedagemDAO dao = new HospedagemDAO(getApplicationContext());
-        try {
-            HospedagemModel hospedagem = dao.buscaHospedagemPorIdViagem(idViagem);
-            if (hospedagem != null) {
-                edtCusto.setText(String.valueOf(hospedagem.getCusto_noite()));
-                edtQtdNoite.setText(String.valueOf(hospedagem.getQtd_noite()));
-                edtNumQuarto.setText(String.valueOf(hospedagem.getQtd_quarto()));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
 }

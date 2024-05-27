@@ -66,23 +66,21 @@ public class TarifaDAO extends AbstrataDAO{
     }
 
 
-    public long Edit(TarifaModel model, Long viagem) throws  SQLException{
-        long rowAffect = 0;
+    public int update(TarifaModel model) throws SQLException {
+        int rowAffect = 0;
 
         try {
             Open();
 
             ContentValues values = new ContentValues();
-            values.put(TarifaModel.COLUNA_VIAGEM, model.getViagem());
             values.put(TarifaModel.COLUNA_CUSTO_PESSOA, model.getCusto_pessoa());
             values.put(TarifaModel.COLUNA_QTD_PESSOA, model.getQtd_pessoa());
             values.put(TarifaModel.COLUNA_CUSTO_VEICULO, model.getCusto_veiculo());
 
+            String whereClause = TarifaModel.COLUNA_ID + " = ?";
+            String[] whereArgs = {String.valueOf(model.getId())};
 
-            String selection = TarifaModel.COLUNA_VIAGEM + " = ?";
-            String[] selectionArgs = {viagem.toString()};
-
-            rowAffect = db.update(TarifaModel.TABELA_NOME, values, selection, selectionArgs);
+            rowAffect = db.update(TarifaModel.TABELA_NOME, values, whereClause, whereArgs);
         } finally {
             Close();
         }

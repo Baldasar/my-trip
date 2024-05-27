@@ -1,6 +1,8 @@
 package com.zagcorp.my_trip;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,7 +49,6 @@ public class ViagemAdapter extends RecyclerView.Adapter<ViagemAdapter.ViewHolder
         holder.textNomeViagem.setText(viagem.getTitulo());
         holder.textSubtitulo.setText("Local: " + viagem.getLocal());
         holder.novoSubtitulo.setText("Duração: " + viagem.getDuracao());
-        holder.textValor.setText("R$: 20.000,00");
         holder.btnVerMais.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,13 +62,33 @@ public class ViagemAdapter extends RecyclerView.Adapter<ViagemAdapter.ViewHolder
         holder.btnExcluir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                excluirDados(viagem.getId());
-                Toast.makeText(context, "Viagem excluída com sucesso", Toast.LENGTH_SHORT).show();
-                if (homeActivity != null) {
-                    homeActivity.recreate(); // Certifique-se de que homeActivity não é nulo antes de chamar recreate()
-                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Confirmar Exclusão");
+                builder.setMessage("Você realmente deseja excluir esta viagem?");
+
+                builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        excluirDados(viagem.getId());
+                        Toast.makeText(context, "Viagem excluída com sucesso", Toast.LENGTH_SHORT).show();
+                        if (homeActivity != null) {
+                            homeActivity.recreate();
+                        }
+                    }
+                });
+
+                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
+
 
         holder.btnEditar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +107,7 @@ public class ViagemAdapter extends RecyclerView.Adapter<ViagemAdapter.ViewHolder
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textNomeViagem, textSubtitulo, textValor, novoSubtitulo;
+        TextView textNomeViagem, textSubtitulo, novoSubtitulo;
         Button btnVerMais, btnExcluir, btnEditar;
 
         public ViewHolder(@NonNull View itemView) {
@@ -94,7 +115,6 @@ public class ViagemAdapter extends RecyclerView.Adapter<ViagemAdapter.ViewHolder
             textNomeViagem = itemView.findViewById(R.id.textNomeViagem);
             textSubtitulo = itemView.findViewById(R.id.textSubtitulo);
             novoSubtitulo = itemView.findViewById(R.id.novoSubtitulo);
-            textValor = itemView.findViewById(R.id.textValor);
             btnVerMais = itemView.findViewById(R.id.btnVerMais);
             btnExcluir = itemView.findViewById(R.id.btnExcluir);
             btnEditar = itemView.findViewById(R.id.btnEditar);
