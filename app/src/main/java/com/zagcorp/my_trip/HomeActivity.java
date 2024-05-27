@@ -88,6 +88,11 @@ public class HomeActivity extends AppCompatActivity {
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
+
+                int myColor = getResources().getColor(R.color.primary);
+
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(myColor);
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(myColor);
             }
         });
 

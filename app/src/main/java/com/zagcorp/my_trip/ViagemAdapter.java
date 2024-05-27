@@ -86,6 +86,11 @@ public class ViagemAdapter extends RecyclerView.Adapter<ViagemAdapter.ViewHolder
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
+
+                int myColor = context.getResources().getColor(R.color.primary);
+
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(myColor);
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(myColor);
             }
         });
 
