@@ -5,9 +5,11 @@
     <color name="editar">#97C1C1</color>
 
 <!-- Paleta De Cores-->
-    <color name="preto">#282832</color>
-    <color name="vermelhoEscuro">#77181e</color>
-    <color name="vermelhoClaro">#a92727</color>
-    <color name="cinzaClaro">#c6d6d6</color>
-    <color name="branco">#dee7e7</color>
+    <color name="preto">#000000</color>
+    <color name="primary">#FF3B30</color>
+    <color name="secundary">#ff9d7d</color>
+    <color name="vermelhoClaroR">#D60000</color>
+    <color name="laranja">#F44336</color>
+    <color name="cinzaClaro">#e5ebbc</color>
+    <color name="branco">#FFFFFF</color>
 </resources>

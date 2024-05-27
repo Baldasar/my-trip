@@ -16,4 +16,11 @@
     <style name="Theme" parent="Base.CardView">
         <item name="android:background">@drawable/border_card</item>
     </style>
+
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <!-- Primary red color for the app -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary</item>
+        <item name="colorAccent">@color/primary</item>
+    </style>
 </resources>

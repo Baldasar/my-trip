@@ -15,6 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Mytrip"
         tools:targetApi="31" >
+
         <activity android:name=".RegisterActivity" />
         <activity android:name=".HomeActivity" />
         <activity android:name=".LocalTripActivity" />

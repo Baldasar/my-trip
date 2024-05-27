@@ -4,7 +4,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -24,10 +27,17 @@ import java.util.List;
 public class HomeActivity extends AppCompatActivity {
     private FloatingActionButton btnAdd, btnLogout;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(getResources().getColor(R.color.primary));
+        window.setNavigationBarColor(getResources().getColor(R.color.primary));
 
         btnAdd = findViewById(R.id.btnAdd);
         btnLogout = findViewById(R.id.btnLogout);

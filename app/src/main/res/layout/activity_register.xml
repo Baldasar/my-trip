@@ -17,9 +17,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/registration_confirm_password"
             android:layout_marginTop="20dp"
-            android:backgroundTint="@color/preto"
             android:text="Voltar"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:backgroundTint="@color/primary"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -139,7 +139,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/registration_confirm_password"
                 android:layout_marginTop="20dp"
-                android:backgroundTint="@color/preto"
+                android:backgroundTint="@color/primary"
                 android:text="Cadastrar"
                 android:textColor="@color/white" />
 

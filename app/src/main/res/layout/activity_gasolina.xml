@@ -16,7 +16,8 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_margin="16dp"
-            android:src="@drawable/back_arrow_icon" />
+            android:src="@drawable/back_arrow_icon"
+            android:backgroundTint="@color/primary"/>
 
     </RelativeLayout>
 
@@ -115,7 +116,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="@color/preto"
                 android:text="Pular Etapa"
-                android:textColor="@color/cinzaClaro" />
+                android:textColor="@color/white" />
 
             <View
                 android:layout_width="16dp"
@@ -126,7 +127,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:backgroundTint="@color/vermelhoEscuro"
+                android:backgroundTint="@color/primary"
                 android:text="Continuar"
                 android:textColor="@color/white" />
         </LinearLayout>
